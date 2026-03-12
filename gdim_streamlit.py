@@ -644,7 +644,7 @@ def chart_phase_waterfall():
                   annotation_font=dict(size=9, color=C["danger"]))
     apply_base(fig, height=280,
         yaxis=dict(**GY, title="Success Rate (%)", range=[0, 125]),
-        xaxis=dict(**GX, tickfont=dict(size=9)),
+        xaxis=dict(gridcolor="rgba(0,212,255,0.06)", zerolinecolor="rgba(0,212,255,0.1)", tickfont=dict(size=9)),
         margin=dict(l=10, r=10, t=30, b=60))
     return fig
 
