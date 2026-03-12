@@ -13,9 +13,9 @@ from datetime import datetime, timedelta
 import random
 import time
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # PAGE CONFIG
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 st.set_page_config(
     page_title="Global Drug Intelligence Monitor",
     page_icon="⊕",
@@ -23,11 +23,12 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # CUSTOM CSS
-# ─────────────────────────────────────────────
+# ---------------------------------------------
+# CSS
 st.html("""
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:        #04080f;
@@ -92,7 +93,7 @@ st.html("""
 
   #MainMenu, footer, header, .stDeployButton { visibility: hidden; display: none; }
 
-  /* ── HEADER ── */
+  /* -- HEADER -- */
   .gdim-header {
     background: linear-gradient(135deg, rgba(4,8,15,0.98) 0%, rgba(10,22,40,0.98) 100%);
     border-bottom: 1px solid var(--border);
@@ -143,7 +144,7 @@ st.html("""
     50% { opacity: 0.4; box-shadow: 0 0 3px var(--lime); }
   }
 
-  /* ── SECTION HEADERS ── */
+  /* -- SECTION HEADERS -- */
   .section-header {
     display: flex; align-items: flex-start; gap: 16px;
     margin: 28px 0 24px 0; padding-bottom: 20px;
@@ -181,7 +182,7 @@ st.html("""
     box-shadow: 0 0 16px rgba(13,244,255,0.06), inset 0 1px 0 rgba(13,244,255,0.08);
   }
 
-  /* ── STAT CARDS ── */
+  /* -- STAT CARDS -- */
   .stat-card {
     background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
     border: 1px solid var(--border2);
@@ -224,7 +225,7 @@ st.html("""
     padding: 2px 8px; border-radius: 3px; display: inline-block; margin-top: 8px;
   }
 
-  /* ── PANELS ── */
+  /* -- PANELS -- */
   .panel {
     background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
     border: 1px solid var(--border2); border-radius: 16px;
@@ -244,7 +245,7 @@ st.html("""
     flex-shrink: 0;
   }
 
-  /* ── REPURPOSE CARDS ── */
+  /* -- REPURPOSE CARDS -- */
   .repurpose-card {
     background: linear-gradient(135deg, var(--bg2), var(--bg3));
     border: 1px solid var(--border2);
@@ -267,7 +268,7 @@ st.html("""
     font-family: 'JetBrains Mono', monospace; color: var(--lime); display: inline-block;
   }
 
-  /* ── RISK BADGES ── */
+  /* -- RISK BADGES -- */
   .risk-high { background: rgba(244,63,94,0.1); color: var(--red);
     border: 1px solid rgba(244,63,94,0.25); padding: 3px 10px; border-radius: 4px;
     font-size: 9px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -278,7 +279,7 @@ st.html("""
     border: 1px solid rgba(57,255,133,0.2); padding: 3px 10px; border-radius: 4px;
     font-size: 9px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
 
-  /* ── GAP BUBBLES ── */
+  /* -- GAP BUBBLES -- */
   .gap-high { background: rgba(244,63,94,0.08); color: var(--red);
     border: 1px solid rgba(244,63,94,0.2); padding: 5px 14px; border-radius: 20px;
     font-size: 10px; font-family: 'JetBrains Mono', monospace; display: inline-block; margin: 3px; }
@@ -289,7 +290,7 @@ st.html("""
     border: 1px solid rgba(13,244,255,0.18); padding: 5px 14px; border-radius: 20px;
     font-size: 10px; font-family: 'JetBrains Mono', monospace; display: inline-block; margin: 3px; }
 
-  /* ── INSIGHT CARDS ── */
+  /* -- INSIGHT CARDS -- */
   .insight-card {
     background: linear-gradient(135deg, var(--bg2), var(--bg3));
     border: 1px solid var(--border2); border-radius: 12px;
@@ -302,7 +303,7 @@ st.html("""
   .insight-meta { font-size: 9px; color: var(--text3); margin-top: 7px;
     font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 
-  /* ── STREAMLIT WIDGET OVERRIDES ── */
+  /* -- STREAMLIT WIDGET OVERRIDES -- */
   .stSelectbox > div > div,
   .stTextInput > div > div > input {
     background: var(--bg2) !important;
@@ -331,7 +332,7 @@ st.html("""
     transform: translateY(-1px) !important;
   }
 
-  /* ── TABS ── */
+  /* -- TABS -- */
   .stTabs [data-baseweb="tab-list"] {
     background: linear-gradient(180deg, var(--bg1) 0%, var(--bg) 100%) !important;
     border-bottom: 1px solid var(--border2) !important;
@@ -357,7 +358,7 @@ st.html("""
     padding: 0 !important;
   }
 
-  /* ── METRICS ── */
+  /* -- METRICS -- */
   div[data-testid="metric-container"] {
     background: linear-gradient(135deg, var(--bg2), var(--bg3)) !important;
     border: 1px solid var(--border2) !important;
@@ -377,14 +378,14 @@ st.html("""
   }
   [data-testid="stMetricDelta"] { font-family: 'JetBrains Mono', monospace !important; }
 
-  /* ── PLOTLY CHARTS ── */
+  /* -- PLOTLY CHARTS -- */
   .js-plotly-plot {
     border-radius: 12px !important;
     border: 1px solid var(--border2) !important;
     box-shadow: 0 4px 24px rgba(0,0,0,0.4) !important;
   }
 
-  /* ── SCROLLBAR ── */
+  /* -- SCROLLBAR -- */
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: rgba(13,244,255,0.2); border-radius: 2px; }
@@ -393,497 +394,7 @@ st.html("""
   hr { border-color: var(--border2) !important; }
 </style>
 """)
-
-# ─────────────────────────────────────────────
-# COLOUR PALETTE
-# ─────────────────────────────────────────────
-C = dict(
-    bg      = "#04080f",
-    panel   = "#070d1a",
-    panel2  = "#0a1628",
-    accent  = "#0df4ff",
-    accent2 = "#8b5cf6",
-    accent3 = "#39ff85",
-    accent4 = "#ff6b2b",
-    accent5 = "#fbbf24",
-    danger  = "#f43f5e",
-    warning = "#fbbf24",
-    success = "#39ff85",
-    text    = "#e8f0fe",
-    text2   = "#7a94b8",
-    text3   = "#3a5068",
-)
-
-PLOTLY_BASE = dict(
-    paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="JetBrains Mono, monospace", color="#7a94b8", size=11),
-    margin=dict(l=10, r=10, t=30, b=10),
-)
-
-GX = dict(gridcolor="rgba(13,244,255,0.05)", zerolinecolor="rgba(13,244,255,0.1)",
-          tickfont=dict(size=9, family="JetBrains Mono, monospace", color="#3a5068"))
-GY = dict(gridcolor="rgba(13,244,255,0.05)", zerolinecolor="rgba(13,244,255,0.1)",
-          tickfont=dict(size=9, family="JetBrains Mono, monospace", color="#3a5068"))
-GL = dict(bgcolor="rgba(0,0,0,0)", font=dict(size=9, family="JetBrains Mono, monospace"))
-
-def apply_base(fig, height=None, **kwargs):
-    layout = {**PLOTLY_BASE}
-    if "xaxis" not in kwargs: layout["xaxis"] = GX
-    if "yaxis" not in kwargs: layout["yaxis"] = GY
-    if "legend" not in kwargs: layout["legend"] = GL
-    if height: layout["height"] = height
-    layout.update(kwargs)
-    fig.update_layout(**layout)
-    return fig
-
-def pl(fig, h=None):
-    apply_base(fig)
-    if h: fig.update_layout(height=h)
-    return fig
-
-# ─────────────────────────────────────────────
-# DATA
-# ─────────────────────────────────────────────
-np.random.seed(42)
-
-def make_dates(n):
-    return [datetime.now() - timedelta(days=n-i) for i in range(n)]
-
-@st.cache_data(ttl=5)
-def discovery_ts():
-    dates = make_dates(180)
-    areas = {"mRNA Therapies":140,"AI-Designed Molecules":60,"Cell & Gene Therapy":90,
-              "Personalized Medicine":110,"PROTAC Degraders":30}
-    data = {}
-    for area, base in areas.items():
-        v, vals = base, []
-        for _ in dates:
-            v += random.uniform(-2, 6)
-            vals.append(max(10, v))
-        data[area] = vals
-    return pd.DataFrame(data, index=dates)
-
-@st.cache_data(ttl=5)
-def shortage_ts():
-    drugs = ["Amoxicillin","Cisplatin","Carboplatin","Methotrexate","Albuterol"]
-    data = {}
-    for drug in drugs:
-        v = random.randint(40, 90)
-        vals = []
-        for _ in make_dates(90):
-            v += random.uniform(-3, 4)
-            v = min(99, max(10, v))
-            vals.append(v)
-        data[drug] = vals
-    return pd.DataFrame(data, index=make_dates(90))
-
-INNOV_DF = pd.DataFrame([
-    ("Boston, MA",42.36,-71.06,9.4,1240), ("San Francisco",37.77,-122.42,9.1,1100),
-    ("Basel, CH",47.56,7.59,8.9,890),     ("London, UK",51.51,-0.13,8.7,860),
-    ("Shanghai, CN",31.23,121.47,8.6,820),("New York, NY",40.71,-74.01,8.8,980),
-    ("Tokyo, JP",35.68,139.69,8.3,750),   ("San Diego, CA",32.72,-117.16,8.2,710),
-    ("Zurich, CH",47.38,8.54,8.5,780),    ("Munich, DE",48.14,11.58,8.1,680),
-    ("Beijing, CN",39.91,116.39,8.0,660), ("Bangalore, IN",12.97,77.59,7.6,520),
-    ("Sydney, AU",-33.87,151.21,7.2,440), ("São Paulo, BR",-23.55,-46.63,6.8,390),
-    ("Stockholm, SE",59.33,18.07,7.8,580),("Singapore",1.35,103.82,7.7,540),
-    ("Toronto, CA",43.65,-79.38,7.9,610), ("Osaka, JP",34.69,135.50,7.5,490),
-], columns=["city","lat","lon","score","startups"])
-
-REPURPOSE_DATA = [
-    ("Metformin","Diabetes T2DM","Alzheimer's Disease",78,"AMPK pathway · neuroinflammation reduction"),
-    ("Sildenafil","Erectile Dysfunction","Pulmonary Hypertension",97,"PDE5 inhibition · vascular smooth muscle"),
-    ("Thalidomide","Morning Sickness","Multiple Myeloma",95,"Immunomodulatory · anti-angiogenic"),
-    ("Aspirin","Pain / Inflammation","Colorectal Cancer Prevention",82,"COX-2 inhibition · 47 observational studies"),
-    ("Baricitinib","Rheumatoid Arthritis","COVID-19 Severe",91,"JAK inhibition · cytokine storm suppression"),
-    ("Itraconazole","Fungal Infections","Basal Cell Carcinoma",71,"Hedgehog pathway inhibition"),
-    ("Rapamycin","Transplant Rejection","Longevity / Aging",68,"mTOR inhibition · autophagy activation"),
-    ("Colchicine","Gout","Pericarditis / ASCVD",87,"NLRP3 inflammasome · IL-1β suppression"),
-]
-
-INTERACTION_DB = {
-    ("warfarin","aspirin"):          ("MODERATE-HIGH",72,"CYP2C9 competition + COX-1 inhibition → bleeding risk↑"),
-    ("warfarin","ibuprofen"):        ("HIGH",84,"CYP2C9 inhibition + GI mucosal damage → hemorrhage risk"),
-    ("maois","ssri"):                ("CRITICAL",97,"Serotonin syndrome — potentially fatal combination"),
-    ("digoxin","amiodarone"):        ("HIGH",88,"P-gp inhibition → digoxin toxicity"),
-    ("methotrexate","nsaids"):       ("HIGH",83,"Reduced renal clearance of MTX → toxicity"),
-    ("clopidogrel","omeprazole"):    ("MODERATE",61,"CYP2C19 inhibition → reduced antiplatelet effect"),
-    ("simvastatin","clarithromycin"):("HIGH",85,"CYP3A4 inhibition → myopathy/rhabdomyolysis risk"),
-    ("lithium","ibuprofen"):         ("HIGH",79,"NSAIDs reduce renal Li+ clearance → toxicity"),
-}
-
-SHORTAGE_TABLE = [
-    ("Amoxicillin","Antibiotic",91,"ACTIVE","US / EU","HIGH"),
-    ("Cisplatin","Chemotherapy",88,"CRITICAL","Global","HIGH"),
-    ("Carboplatin","Chemotherapy",86,"CRITICAL","Global","HIGH"),
-    ("Methotrexate","Immunosuppressant",79,"ACTIVE","US / Asia","HIGH"),
-    ("Albuterol Inhaler","Respiratory",72,"WATCH","US","MEDIUM"),
-    ("Furosemide","Diuretic",64,"WATCH","Europe","MEDIUM"),
-    ("Morphine Sulfate","Opioid Analgesic",58,"MONITOR","US","MEDIUM"),
-    ("Propofol","Anesthetic",45,"RESOLVED","US","LOW"),
-    ("Piperacillin","Antibiotic",82,"ACTIVE","Global","HIGH"),
-    ("Vincristine","Chemotherapy",77,"ACTIVE","US / EU","HIGH"),
-]
-
-COUNTRY_RISK = [
-    ("United States",28,"A",24,18,22,95),("European Union",32,"A-",18,28,20,88),
-    ("China",54,"B",52,64,48,82),        ("India",61,"B-",68,72,61,65),
-    ("Japan",38,"A-",30,35,28,84),       ("South Korea",41,"B+",36,42,33,78),
-    ("Brazil",68,"C+",72,74,69,45),      ("Russia",78,"C",81,88,76,30),
-    ("Australia",35,"A-",29,31,26,82),   ("Canada",31,"A",26,24,23,89),
-    ("Mexico",62,"B-",65,68,60,52),      ("S.S. Africa",89,"D+",92,95,88,18),
-]
-
-RESEARCH_GAPS = [
-    ("Rare Neurological",12,86,94,"#ff3b5c"),
-    ("Neglected Tropical",8,82,91,"#ff3b5c"),
-    ("Pediatric Rare",15,79,85,"#ff3b5c"),
-    ("Antimicrobial Resistance",22,77,88,"#ffb800"),
-    ("Mental Health",35,74,76,"#ffb800"),
-    ("Prion Diseases",5,68,82,"#ff3b5c"),
-    ("Geriatric Polypharmacy",19,58,76,"#ffb800"),
-    ("Oncology",88,40,20,"#00ff9d"),
-    ("Cardiovascular",72,38,22,"#00d4ff"),
-    ("Infectious Disease",68,35,25,"#00d4ff"),
-    ("Diabetes",75,32,18,"#00ff9d"),
-    ("HIV/AIDS",64,28,22,"#00ff9d"),
-]
-
-# ─────────────────────────────────────────────
-# HELPERS
-# ─────────────────────────────────────────────
-def stat_cards(items):
-    """items = list of (label, value, sub, change, up, color)"""
-    cols = st.columns(len(items))
-    for col, (label, value, sub, change, up, color) in zip(cols, items):
-        with col:
-            arrow = "▲" if up else "▼"
-            ch_color = C["success"] if up else C["danger"]
-            ch_border = "rgba(57,255,133,0.15)" if up else "rgba(244,63,94,0.15)"
-            badge = f'<span style="font-size:9px;font-family:JetBrains Mono,monospace;color:{ch_color};background:rgba(0,0,0,0.3);border:1px solid {ch_border};padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px">{arrow} {change}</span>' if change else ""
-            st.html(f"""
-            <div class="stat-card">
-              <div class="stat-label">{label}</div>
-              <div class="stat-value" style="color:{color};text-shadow:0 0 30px {color}40">{value}</div>
-              <div class="stat-sub">{sub}</div>
-              {badge}
-            </div>""")
-
-_SECTION_CTR = [0]
-def section_hdr(icon, title, sub, badge=None):
-    _SECTION_CTR[0] += 1
-    b = f'<span class="ai-badge">{badge}</span>' if badge else ""
-    st.html(f"""
-    <div class="section-header">
-      <span class="section-icon">{icon}</span>
-      <div style="flex:1">
-        <div class="section-title">{title}</div>
-        <div class="section-sub">{sub}</div>
-      </div>
-      {b}
-    </div>""")
-
-def ptitle(text):
-    st.html(f'<div class="panel-title">{text}</div>')
-
-# ─────────────────────────────────────────────
-# CHART BUILDERS
-# ─────────────────────────────────────────────
-def chart_discovery():
-    df = discovery_ts()
-    colors = [C["accent"],C["accent2"],C["accent3"],C["accent4"],C["accent5"]]
-    fig = go.Figure()
-    for i, col in enumerate(df.columns):
-        fig.add_trace(go.Scatter(x=df.index, y=df[col], name=col, mode="lines",
-            line=dict(color=colors[i], width=2),
-            hovertemplate=f"<b>{col}</b><br>Papers: %{{y:.0f}}<extra></extra>"))
-    apply_base(fig, height=300,
-        title=dict(text="Publication Volume by Therapeutic Area (180 days)",
-                   font=dict(size=11,color=C["text2"]),x=0.01),
-        hovermode="x unified",
-        legend=dict(orientation="h",y=-0.2,bgcolor="rgba(0,0,0,0)",font=dict(size=9)))
-    return fig
-
-def chart_trend_forecast():
-    areas = ["mRNA Therapies","AI-Designed Molecules","Personalized Medicine",
-             "Cell & Gene Therapy","PROTAC Degraders","RNA Interference",
-             "Microbiome Therapies","Radiopharmaceuticals"]
-    scores = [94,91,89,85,78,74,68,62]
-    colors = [C["accent"] if s>80 else C["accent5"] if s>70 else C["text3"] for s in scores]
-    fig = go.Figure(go.Bar(x=scores,y=areas,orientation="h",
-        marker=dict(color=colors),text=[f"{s}%" for s in scores],
-        textposition="inside",textfont=dict(size=10,family="DM Mono,monospace"),
-        hovertemplate="<b>%{y}</b><br>Trend Score: %{x}%<extra></extra>"))
-    apply_base(fig, height=300,
-        xaxis=dict(**GX,range=[0,100],ticksuffix="%"),
-        margin=dict(l=0,r=10,t=10,b=10))
-    return fig
-
-def chart_pubmed_area():
-    months = pd.date_range("2018-01", periods=72, freq="ME")
-    areas = {"Oncology":18,"Immunology":8,"CNS":11,"Infectious Disease":14,"Cardiovascular":9}
-    colors = [C["danger"],C["accent2"],C["accent5"],C["accent3"],C["accent"]]
-    fig = go.Figure()
-    for (area, base), col in zip(areas.items(), colors):
-        vals = [base + i*0.15 + np.random.normal(0,1) for i in range(len(months))]
-        fig.add_trace(go.Scatter(x=months,y=vals,name=area,stackgroup="one",
-            mode="lines",line=dict(width=0.5,color=col),
-            hovertemplate=f"<b>{area}</b><br>%{{y:.1f}}K papers<extra></extra>"))
-    apply_base(fig, height=260,
-        title=dict(text="PubMed Stacked Publications by Area (000s)",font=dict(size=11,color=C["text2"]),x=0.01),
-        legend=dict(orientation="h",y=-0.25,bgcolor="rgba(0,0,0,0)",font=dict(size=9)))
-    return fig
-
-def chart_live_kpis(n_intervals):
-    random.seed(n_intervals)
-    vals = {
-        "mRNA Papers (K)": round(120 + n_intervals*0.3 + random.gauss(0,2), 1),
-        "Active Trials":   round(487 + n_intervals*0.12 + random.gauss(0,3), 1),
-        "Patents (K)":     round(89  + n_intervals*0.05 + random.gauss(0,1), 1),
-        "New Compounds":   round(48  + n_intervals*0.02 + random.gauss(0,0.5), 1),
-    }
-    fig = go.Figure()
-    for i, (k, v) in enumerate(vals.items()):
-        ref = round(v - random.uniform(0.1,2), 1)
-        fig.add_trace(go.Indicator(
-            mode="number+delta", value=v,
-            delta=dict(reference=ref,increasing=dict(color=C["success"]),decreasing=dict(color=C["danger"])),
-            title=dict(text=k, font=dict(size=10,color=C["text2"],family="DM Mono,monospace")),
-            number=dict(font=dict(size=22,color=C["accent"],family="Syne,sans-serif")),
-            domain=dict(row=i//2, column=i%2)
-        ))
-    apply_base(fig, height=260,
-        grid=dict(rows=2,columns=2,pattern="independent"),
-        margin=dict(l=10,r=10,t=10,b=10))
-    return fig
-
-def chart_shortage_ts():
-    df = shortage_ts()
-    colors = [C["danger"],C["accent4"],C["accent2"],C["warning"],C["accent"]]
-    fig = go.Figure()
-    for i, drug in enumerate(df.columns):
-        fig.add_trace(go.Scatter(x=df.index,y=df[drug],name=drug,mode="lines",
-            line=dict(color=colors[i],width=2),
-            hovertemplate=f"<b>{drug}</b><br>Risk: %{{y:.1f}}<extra></extra>"))
-    fig.add_hline(y=80,line_dash="dash",line_color=C["danger"],
-        annotation_text="Critical Threshold (80)",annotation_font=dict(size=9,color=C["danger"]))
-    apply_base(fig, height=280,
-        title=dict(text="Drug Shortage Risk Scores — 90-Day Rolling Window",font=dict(size=11,color=C["text2"]),x=0.01),
-        hovermode="x unified")
-    return fig
-
-def chart_shortage_bar():
-    drugs = [r[0] for r in SHORTAGE_TABLE]
-    scores = [r[2] for r in SHORTAGE_TABLE]
-    risk = [r[5] for r in SHORTAGE_TABLE]
-    cmap = {"HIGH":C["danger"],"MEDIUM":C["warning"],"LOW":C["success"]}
-    colors = [cmap[r] for r in risk]
-    fig = go.Figure(go.Bar(x=scores,y=drugs,orientation="h",
-        marker=dict(color=colors),text=scores,textposition="inside",
-        textfont=dict(size=10),
-        hovertemplate="<b>%{y}</b><br>Risk Score: %{x}<extra></extra>"))
-    apply_base(fig, height=340,
-        xaxis=dict(**GX,range=[0,100]),
-        margin=dict(l=0,r=10,t=10,b=10))
-    return fig
-
-def chart_repurpose():
-    drugs = [r[0] for r in REPURPOSE_DATA]
-    confs = [r[3] for r in REPURPOSE_DATA]
-    indics = [r[2] for r in REPURPOSE_DATA]
-    colors = [C["accent3"] if c>85 else C["accent"] if c>70 else C["text2"] for c in confs]
-    fig = go.Figure(go.Bar(x=confs,y=drugs,orientation="h",
-        marker=dict(color=colors,opacity=0.85),
-        text=[f"{c}% → {ind[:22]}…" if len(ind)>22 else f"{c}% → {ind}" for c,ind in zip(confs,indics)],
-        textposition="inside",textfont=dict(size=9,family="DM Mono,monospace"),
-        customdata=[[r[1],r[2],r[4]] for r in REPURPOSE_DATA],
-        hovertemplate="<b>%{y}</b><br>From: %{customdata[0]}<br>To: %{customdata[1]}<br>Basis: %{customdata[2]}<br>Confidence: %{x}%<extra></extra>"))
-    apply_base(fig, height=320,
-        xaxis=dict(**GX,range=[0,100],ticksuffix="%"),
-        margin=dict(l=0,r=10,t=10,b=10))
-    return fig
-
-def chart_innovation_map():
-    df = INNOV_DF
-    fig = go.Figure(go.Scattergeo(
-        lat=df["lat"],lon=df["lon"],text=df["city"],
-        customdata=np.column_stack([df["score"],df["startups"]]),
-        mode="markers+text",textposition="top center",
-        textfont=dict(size=9,color="rgba(226,234,245,0.8)",family="DM Mono,monospace"),
-        marker=dict(
-            size=df["score"]*3.5,color=df["score"],
-            colorscale=[[0,"rgba(0,212,255,0.3)"],[0.5,"rgba(123,79,255,0.7)"],[1,"rgba(0,255,157,0.9)"]],
-            showscale=True,
-            colorbar=dict(title=dict(text="Innovation<br>Index",font=dict(size=9,color=C["text2"])),
-                         thickness=10,len=0.6,tickfont=dict(size=8,color=C["text2"]),bgcolor="rgba(0,0,0,0)"),
-            line=dict(width=1,color="rgba(255,255,255,0.3)"),sizemode="diameter"),
-        hovertemplate="<b>%{text}</b><br>Innovation Index: %{customdata[0]}<br>Startups: %{customdata[1]}<extra></extra>"
-    ))
-    fig.update_geos(bgcolor=C["bg"],landcolor=C["panel"],showocean=True,oceancolor="#060d1a",
-        showland=True,showcoastlines=True,coastlinecolor="rgba(0,212,255,0.2)",
-        coastlinewidth=0.8,countrycolor="rgba(0,212,255,0.1)",showframe=False,
-        projection_type="natural earth")
-    apply_base(fig, height=440, geo=dict(bgcolor=C["bg"]),
-        margin=dict(l=0,r=0,t=0,b=0))
-    return fig
-
-def chart_choropleth():
-    fig = go.Figure(go.Choropleth(
-        locations=["USA","CHN","DEU","GBR","CHE","JPN","KOR","BRA","IND","AUS"],
-        z=[100,78,72,71,68,64,55,42,48,59],
-        colorscale=[[0,"rgba(0,212,255,0.1)"],[0.5,"rgba(123,79,255,0.5)"],[1,"rgba(0,255,157,0.9)"]],
-        showscale=True,
-        colorbar=dict(thickness=10,len=0.7,tickfont=dict(size=8,color=C["text2"]),bgcolor="rgba(0,0,0,0)"),
-        marker=dict(line=dict(color="rgba(0,212,255,0.15)",width=0.5))
-    ))
-    apply_base(fig, height=280,
-        geo=dict(bgcolor=C["bg"],landcolor=C["panel"],showocean=True,oceancolor="#060d1a",
-                showcoastlines=True,coastlinecolor="rgba(0,212,255,0.2)"),
-        margin=dict(l=0,r=0,t=10,b=10))
-    return fig
-
-def chart_interaction_gauge(score, level):
-    color = C["danger"] if score>75 else C["warning"] if score>50 else C["success"]
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",value=score,
-        number=dict(font=dict(size=36,color=color,family="Syne,sans-serif"),suffix="/100"),
-        gauge=dict(
-            axis=dict(range=[0,100],tickfont=dict(size=9)),
-            bar=dict(color=color,thickness=0.28),
-            bgcolor="rgba(0,0,0,0)",bordercolor="rgba(0,0,0,0)",
-            steps=[dict(range=[0,33],color="rgba(0,230,118,0.07)"),
-                   dict(range=[33,66],color="rgba(255,184,0,0.07)"),
-                   dict(range=[66,100],color="rgba(255,59,92,0.07)")],
-        ),
-        title=dict(text=f"Interaction Risk: {level}",font=dict(size=11,color=color,family="DM Mono,monospace"))
-    ))
-    apply_base(fig, height=250, margin=dict(l=20,r=20,t=50,b=10))
-    return fig
-
-def chart_network_sankey():
-    diseases = ["Alzheimer's","Parkinson's","Lung Cancer","Breast Cancer","Diabetes T2","Heart Disease","Autoimmune"]
-    proteins = ["BACE1","α-Synuclein","EGFR","BRCA1/2","GLP-1R","PCSK9","JAK","TNF-α"]
-    drugs    = ["Lecanemab","Carbidopa","Osimertinib","Olaparib","Semaglutide","Evolocumab","Baricitinib","Adalimumab"]
-    labels = diseases + proteins + drugs
-    nd, np_ = len(diseases), len(proteins)
-    sources = [0,1,2,3,4,5,6,6,  nd+0,nd+1,nd+2,nd+3,nd+4,nd+5,nd+6,nd+7]
-    targets = [nd+0,nd+1,nd+2,nd+3,nd+4,nd+5,nd+6,nd+7,
-               nd+np_+0,nd+np_+1,nd+np_+2,nd+np_+3,nd+np_+4,nd+np_+5,nd+np_+6,nd+np_+7]
-    values  = [8,7,9,8,10,9,7,8]*2
-    colors_nodes = ([C["danger"]]*nd + [C["accent5"]]*np_ + [C["accent"]]*len(drugs))
-    fig = go.Figure(go.Sankey(
-        node=dict(label=labels,color=colors_nodes,pad=15,thickness=15,
-                  line=dict(color="rgba(0,0,0,0)",width=0)),
-        link=dict(source=sources,target=targets,value=values,
-                  color=["rgba(0,212,255,0.15)"]*len(sources))
-    ))
-    apply_base(fig, height=380, margin=dict(l=10,r=10,t=20,b=10))
-    return fig
-
-def chart_country_risk():
-    df = pd.DataFrame(COUNTRY_RISK,columns=["country","score","grade","shortage","reg_delay","supply","trial"])
-    fig = go.Figure()
-    fig.add_trace(go.Bar(name="Shortage Risk",x=df["country"],y=df["shortage"],
-        marker_color=C["danger"],opacity=0.8))
-    fig.add_trace(go.Bar(name="Reg. Delay",x=df["country"],y=df["reg_delay"],
-        marker_color=C["warning"],opacity=0.8))
-    fig.add_trace(go.Bar(name="Supply Chain",x=df["country"],y=df["supply"],
-        marker_color=C["accent4"],opacity=0.8))
-    apply_base(fig, height=320, barmode="group",
-        legend=dict(orientation="h",y=-0.2,bgcolor="rgba(0,0,0,0)",font=dict(size=9)))
-    return fig
-
-def chart_risk_radar(idx):
-    row = COUNTRY_RISK[idx]
-    cats = ["Drug Shortage","Reg. Delay","Supply Chain","Trial Activity<br>(inverse)","Drug Shortage"]
-    vals = [row[3],row[4],row[5],100-row[6],row[3]]
-    fig = go.Figure(go.Scatterpolar(r=vals,theta=cats,fill="toself",
-        fillcolor="rgba(255,59,92,0.15)",line=dict(color=C["danger"],width=2),name=row[0]))
-    apply_base(fig, height=320,
-        polar=dict(bgcolor="rgba(0,0,0,0)",
-            radialaxis=dict(visible=True,range=[0,100],gridcolor="rgba(0,212,255,0.1)",tickfont=dict(size=8,color=C["text3"])),
-            angularaxis=dict(gridcolor="rgba(0,212,255,0.1)",tickfont=dict(size=9,color=C["text2"]))),
-        margin=dict(l=30,r=30,t=30,b=30))
-    return fig
-
-def chart_trial_gauge(prob, label):
-    color = C["success"] if prob>65 else C["warning"] if prob>40 else C["danger"]
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",value=prob,
-        number=dict(suffix="%",font=dict(size=40,color=color,family="Syne,sans-serif")),
-        gauge=dict(
-            axis=dict(range=[0,100],tickfont=dict(size=9,color=C["text3"])),
-            bar=dict(color=color,thickness=0.25),
-            bgcolor="rgba(0,0,0,0)",bordercolor="rgba(0,0,0,0)",
-            steps=[dict(range=[0,40],color="rgba(255,59,92,0.08)"),
-                   dict(range=[40,65],color="rgba(255,184,0,0.08)"),
-                   dict(range=[65,100],color="rgba(0,230,118,0.08)")],
-            threshold=dict(line=dict(color=color,width=2),thickness=0.75,value=prob)
-        ),
-        title=dict(text=label,font=dict(size=11,color=C["text2"],family="DM Mono,monospace"))
-    ))
-    apply_base(fig, height=280, margin=dict(l=20,r=20,t=50,b=10))
-    return fig
-
-def chart_phase_waterfall():
-    phases = ["Phase I", "Phase I→II", "Phase II→III", "Ph III→Approval", "Overall"]
-    rates  = [100, 63, 31, 58, 12]
-    colors = [C["accent"], C["accent3"], C["warning"], C["accent3"], C["danger"]]
-    fig = go.Figure(go.Bar(
-        x=phases, y=rates,
-        marker=dict(color=colors, opacity=0.85, line=dict(width=0)),
-        text=[f"{r}%" for r in rates],
-        textposition="outside",
-        textfont=dict(size=11, family="DM Mono,monospace"),
-        hovertemplate="<b>%{x}</b><br>Success Rate: %{y}%<extra></extra>",
-    ))
-    fig.add_hline(y=12, line_dash="dot", line_color=C["danger"],
-                  annotation_text="Overall 12%",
-                  annotation_font=dict(size=9, color=C["danger"]))
-    apply_base(fig, height=280,
-        yaxis=dict(**GY, title="Success Rate (%)", range=[0, 125]),
-        xaxis=dict(gridcolor="rgba(0,212,255,0.06)", zerolinecolor="rgba(0,212,255,0.1)", tickfont=dict(size=9)),
-        margin=dict(l=10, r=10, t=30, b=60))
-    return fig
-
-def chart_gap_scatter():
-    df = pd.DataFrame(RESEARCH_GAPS,columns=["area","research","burden","gap","color"])
-    fig = go.Figure()
-    fig.add_shape(type="rect",x0=0,y0=50,x1=50,y1=100,fillcolor="rgba(255,59,92,0.04)",line=dict(width=0))
-    fig.add_annotation(x=25,y=90,text="⚠ RESEARCH DESERT",showarrow=False,
-        font=dict(size=9,color="rgba(255,59,92,0.5)",family="DM Mono,monospace"))
-    fig.add_shape(type="rect",x0=50,y0=0,x1=100,y1=50,fillcolor="rgba(0,230,118,0.03)",line=dict(width=0))
-    fig.add_annotation(x=75,y=15,text="✓ WELL SERVED",showarrow=False,
-        font=dict(size=9,color="rgba(0,230,118,0.5)",family="DM Mono,monospace"))
-    fig.add_trace(go.Scatter(x=df["research"],y=df["burden"],mode="markers+text",
-        marker=dict(size=df["gap"]/5,color=df["color"],opacity=0.85,
-                   line=dict(width=1,color="rgba(255,255,255,0.2)")),
-        text=df["area"],textposition="top center",
-        textfont=dict(size=9,family="DM Mono,monospace"),
-        hovertemplate="<b>%{text}</b><br>Research: %{x}%<br>Burden: %{y}%<extra></extra>"))
-    fig.add_hline(y=50,line_dash="dash",line_color="rgba(255,255,255,0.08)")
-    fig.add_vline(x=50,line_dash="dash",line_color="rgba(255,255,255,0.08)")
-    apply_base(fig, height=420,
-        xaxis=dict(**GX,title="Research Activity (%)",range=[-5,105]),
-        yaxis=dict(**GY,title="Disease Burden (%)",range=[-5,105]))
-    return fig
-
-def chart_gap_bar():
-    df = pd.DataFrame(RESEARCH_GAPS,columns=["area","research","burden","gap","color"])
-    df = df.sort_values("gap",ascending=True)
-    fig = go.Figure(go.Bar(x=df["gap"],y=df["area"],orientation="h",
-        marker=dict(color=df["color"],opacity=0.85),
-        text=df["gap"].astype(str),textposition="inside",
-        hovertemplate="<b>%{y}</b><br>Gap Score: %{x}/100<extra></extra>"))
-    apply_base(fig, height=380,
-        xaxis=dict(**GX,range=[0,100]),
-        margin=dict(l=0,r=10,t=10,b=10))
-    return fig
-
-# ─────────────────────────────────────────────
 # HEADER
-# ─────────────────────────────────────────────
-now_str = datetime.utcnow().strftime("%H:%M:%S UTC")
 st.html(f"""
 <div class="gdim-header">
   <div style="display:flex;align-items:center;gap:14px">
@@ -904,13 +415,15 @@ st.html(f"""
     </div>
   </div>
 </div>
-""")
 
+""")
 st.html("<div style='height:8px'></div>")
 
-# ─────────────────────────────────────────────
+
+
+# ---------------------------------------------
 # TABS
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 tabs = st.tabs([
     "🔬 Drug Discovery",
     "🔄 Repurposing",
@@ -995,7 +508,7 @@ with tabs[1]:
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
                 <span class="drug-tag">{drug}</span>
                 <span style="font-size:10px;color:#4a6080;font-family:DM Mono,monospace">{orig}</span>
-                <span style="color:#00ff9d;font-size:14px">→</span>
+                <span style="color:#00ff9d;font-size:14px">&rarr;</span>
                 <span class="new-tag">{new_use}</span>
               </div>
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -1145,521 +658,743 @@ with tabs[4]:
 
     ptitle("Global Pharmaceutical Innovation Density — Interactive 3D Globe")
     st.html("""
-<div id="globe-container" style="width:100%;height:560px;position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(13,244,255,0.12);background:#020408;">
+<style>
+  :root {
+    --bg:#04080f; --bg2:#0a1628; --cyan:#0df4ff; --lime:#39ff85;
+    --violet:#8b5cf6; --text:#e8f0fe; --text3:#3a5068;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); font-family:'Space Grotesk',sans-serif; }
 
-  <!-- Loading screen -->
-  <div id="globe-loading" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#020408;z-index:10;gap:12px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#0df4ff;letter-spacing:0.2em;text-transform:uppercase;">Rendering Globe</div>
-    <div style="width:180px;height:2px;background:rgba(13,244,255,0.1);border-radius:1px;overflow:hidden;">
-      <div id="load-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#0df4ff,#8b5cf6);border-radius:1px;transition:width 0.3s;"></div>
-    </div>
-  </div>
+  /* -- HEADER -- */
+  .gdim-header {
+    background: linear-gradient(135deg, rgba(4,8,15,0.98), rgba(10,22,40,0.98));
+    border-bottom: 1px solid rgba(13,244,255,0.1);
+    padding: 0 32px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 1px 0 rgba(13,244,255,0.08), 0 8px 32px rgba(0,0,0,0.6);
+    position: sticky; top: 0; z-index: 999;
+  }
+  .gdim-logo-mark {
+    width:36px; height:36px; border-radius:10px;
+    background: linear-gradient(135deg,rgba(13,244,255,0.15),rgba(139,92,246,0.15));
+    border: 1px solid rgba(13,244,255,0.3);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; font-weight:900; color:var(--cyan);
+    text-shadow:0 0 20px var(--cyan);
+    box-shadow:0 0 20px rgba(13,244,255,0.12), inset 0 1px 0 rgba(255,255,255,0.1);
+    flex-shrink:0;
+  }
+  .gdim-title {
+    font-size:15px; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; margin:0;
+    background:linear-gradient(90deg,var(--text),var(--cyan));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .gdim-sub {
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px; color:var(--text3); margin:2px 0 0 0;
+    letter-spacing:0.14em; text-transform:uppercase;
+  }
+  .live-badge {
+    font-family:'JetBrains Mono',monospace; font-size:9px;
+    color:var(--lime); display:flex; align-items:center; gap:8px;
+    background:rgba(57,255,133,0.06); border:1px solid rgba(57,255,133,0.2);
+    padding:6px 14px; border-radius:20px; letter-spacing:0.06em;
+  }
+  .live-dot {
+    width:6px; height:6px; border-radius:50%;
+    background:var(--lime); box-shadow:0 0 10px var(--lime);
+    animation:livePulse 1.4s ease-in-out infinite; flex-shrink:0;
+  }
+  @keyframes livePulse {
+    0%,100%{opacity:1;box-shadow:0 0 8px var(--lime);}
+    50%{opacity:0.4;box-shadow:0 0 3px var(--lime);}
+  }
 
-  <!-- Overlay UI -->
-  <div style="position:absolute;top:16px;left:16px;z-index:5;pointer-events:none;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(13,244,255,0.5);letter-spacing:0.16em;text-transform:uppercase;margin-bottom:4px;">DRAG TO ROTATE · SCROLL TO ZOOM</div>
-  </div>
-  <div id="globe-tooltip" style="position:absolute;display:none;z-index:6;pointer-events:none;
-    background:rgba(4,8,15,0.92);border:1px solid rgba(13,244,255,0.25);
-    border-radius:10px;padding:12px 16px;min-width:180px;
+  /* -- GLOBE WRAP -- */
+  .globe-wrap {
+    width:100%; height:560px; position:relative;
+    border-radius:16px; overflow:hidden;
+    border:1px solid rgba(13,244,255,0.12);
+    background:#020408;
+  }
+  #globe-canvas { width:100%; height:100%; display:block; cursor:grab; touch-action:none; }
+  #globe-canvas:active { cursor:grabbing; }
+
+  /* HUD */
+  .hud-hint {
+    position:absolute; top:14px; left:14px;
+    font-family:'JetBrains Mono',monospace; font-size:8px;
+    color:rgba(13,244,255,0.4); letter-spacing:0.16em; text-transform:uppercase;
+    pointer-events:none;
+  }
+  .hud-badge {
+    position:absolute; top:14px; right:14px;
+    font-family:'JetBrains Mono',monospace; font-size:8px;
+    color:rgba(57,255,133,0.5); letter-spacing:0.12em; text-transform:uppercase;
+    background:rgba(57,255,133,0.05); border:1px solid rgba(57,255,133,0.12);
+    padding:4px 10px; border-radius:4px; pointer-events:none;
+    display:flex; align-items:center; gap:6px;
+  }
+  .hud-dot { width:5px;height:5px;border-radius:50%;background:var(--lime);
+    box-shadow:0 0 8px var(--lime);animation:livePulse 1.4s ease-in-out infinite; }
+
+  /* Tooltip */
+  #tt {
+    position:absolute; display:none; z-index:6; pointer-events:none;
+    background:rgba(4,8,15,0.93); border:1px solid rgba(13,244,255,0.25);
+    border-radius:10px; padding:12px 16px; min-width:190px;
     box-shadow:0 8px 32px rgba(0,0,0,0.7),0 0 0 1px rgba(13,244,255,0.06);
-    backdrop-filter:blur(12px);">
-    <div id="tt-city" style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#e8f0fe;margin-bottom:6px;"></div>
-    <div style="display:flex;gap:16px;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#3a5068;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:2px;">INDEX</div>
-        <div id="tt-score" style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#0df4ff;"></div>
-      </div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#3a5068;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:2px;">STARTUPS</div>
-        <div id="tt-startups" style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#39ff85;"></div>
-      </div>
-    </div>
-    <div id="tt-bar-wrap" style="margin-top:8px;height:3px;background:rgba(255,255,255,0.06);border-radius:2px;">
-      <div id="tt-bar" style="height:100%;border-radius:2px;background:linear-gradient(90deg,#0df4ff,#8b5cf6);transition:width 0.3s;"></div>
-    </div>
-  </div>
+  }
+  #tt-city { font-size:14px; font-weight:700; color:#e8f0fe; margin-bottom:8px; }
+  .tt-row { display:flex; gap:20px; }
+  .tt-col label { font-family:'JetBrains Mono',monospace; font-size:8px;
+    color:#3a5068; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:2px; }
+  .tt-col span { font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; }
+  #tt-score { color:#0df4ff; }
+  #tt-startups { color:#39ff85; }
+  #tt-bar-wrap { margin-top:8px;height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden; }
+  #tt-bar { height:100%;border-radius:2px;background:linear-gradient(90deg,#0df4ff,#8b5cf6); }
+  #tt-rank { font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a5068;margin-top:6px;letter-spacing:0.1em; }
+</style>
 
-  <canvas id="globe-canvas" style="width:100%;height:100%;display:block;cursor:grab;"></canvas>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<div class="globe-wrap">
+  <div class="hud-hint">🌐 Drag · Scroll to zoom · Hover markers</div>
+  <div class="hud-badge"><span class="hud-dot"></span>18 Pharma Hubs · Live</div>
+  <canvas id="globe-canvas"></canvas>
+  <div id="tt">
+    <div id="tt-city"></div>
+    <div class="tt-row">
+      <div class="tt-col"><label>Index</label><span id="tt-score"></span></div>
+      <div class="tt-col"><label>Startups</label><span id="tt-startups"></span></div>
+    </div>
+    <div id="tt-bar-wrap"><div id="tt-bar" style="width:0%"></div></div>
+    <div id="tt-rank"></div>
+  </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-(function() {
-  const HUBS = [
-    {city:"Boston, MA",      lat:42.36,  lon:-71.06, score:9.4, startups:1240},
-    {city:"San Francisco",   lat:37.77,  lon:-122.42,score:9.1, startups:1100},
-    {city:"Basel, CH",       lat:47.56,  lon:7.59,   score:8.9, startups:890},
-    {city:"London, UK",      lat:51.51,  lon:-0.13,  score:8.7, startups:860},
-    {city:"Shanghai, CN",    lat:31.23,  lon:121.47, score:8.6, startups:820},
-    {city:"New York, NY",    lat:40.71,  lon:-74.01, score:8.8, startups:980},
-    {city:"Tokyo, JP",       lat:35.68,  lon:139.69, score:8.3, startups:750},
-    {city:"San Diego, CA",   lat:32.72,  lon:-117.16,score:8.2, startups:710},
-    {city:"Zurich, CH",      lat:47.38,  lon:8.54,   score:8.5, startups:780},
-    {city:"Munich, DE",      lat:48.14,  lon:11.58,  score:8.1, startups:680},
-    {city:"Beijing, CN",     lat:39.91,  lon:116.39, score:8.0, startups:660},
-    {city:"Bangalore, IN",   lat:12.97,  lon:77.59,  score:7.6, startups:520},
-    {city:"Sydney, AU",      lat:-33.87, lon:151.21, score:7.2, startups:440},
-    {city:"São Paulo, BR",   lat:-23.55, lon:-46.63, score:6.8, startups:390},
-    {city:"Stockholm, SE",   lat:59.33,  lon:18.07,  score:7.8, startups:580},
-    {city:"Singapore",       lat:1.35,   lon:103.82, score:7.7, startups:540},
-    {city:"Toronto, CA",     lat:43.65,  lon:-79.38, score:7.9, startups:610},
-    {city:"Osaka, JP",       lat:34.69,  lon:135.50, score:7.5, startups:490},
-  ];
+(function(){
+"use strict";
 
-  function latLonToVec3(lat, lon, r) {
-    const phi   = (90 - lat) * Math.PI / 180;
-    const theta = (lon + 180) * Math.PI / 180;
-    return new THREE.Vector3(
-      -r * Math.sin(phi) * Math.cos(theta),
-       r * Math.cos(phi),
-       r * Math.sin(phi) * Math.sin(theta)
-    );
+// -- Data --
+const HUBS = [
+  {city:"Boston, MA",      lat:42.36,  lon:-71.06, score:9.4, startups:1240, rank:1},
+  {city:"San Francisco",   lat:37.77,  lon:-122.42,score:9.1, startups:1100, rank:2},
+  {city:"New York, NY",    lat:40.71,  lon:-74.01, score:8.8, startups:980,  rank:3},
+  {city:"Basel, CH",       lat:47.56,  lon:7.59,   score:8.9, startups:890,  rank:4},
+  {city:"London, UK",      lat:51.51,  lon:-0.13,  score:8.7, startups:860,  rank:5},
+  {city:"Shanghai, CN",    lat:31.23,  lon:121.47, score:8.6, startups:820,  rank:6},
+  {city:"Zurich, CH",      lat:47.38,  lon:8.54,   score:8.5, startups:780,  rank:7},
+  {city:"Tokyo, JP",       lat:35.68,  lon:139.69, score:8.3, startups:750,  rank:8},
+  {city:"San Diego, CA",   lat:32.72,  lon:-117.16,score:8.2, startups:710,  rank:9},
+  {city:"Munich, DE",      lat:48.14,  lon:11.58,  score:8.1, startups:680,  rank:10},
+  {city:"Beijing, CN",     lat:39.91,  lon:116.39, score:8.0, startups:660,  rank:11},
+  {city:"Toronto, CA",     lat:43.65,  lon:-79.38, score:7.9, startups:610,  rank:12},
+  {city:"Stockholm, SE",   lat:59.33,  lon:18.07,  score:7.8, startups:580,  rank:13},
+  {city:"Singapore",       lat:1.35,   lon:103.82, score:7.7, startups:540,  rank:14},
+  {city:"Bangalore, IN",   lat:12.97,  lon:77.59,  score:7.6, startups:520,  rank:15},
+  {city:"Osaka, JP",       lat:34.69,  lon:135.50, score:7.5, startups:490,  rank:16},
+  {city:"Sydney, AU",      lat:-33.87, lon:151.21, score:7.2, startups:440,  rank:17},
+  {city:"São Paulo, BR",   lat:-23.55, lon:-46.63, score:6.8, startups:390,  rank:18},
+];
+
+// -- Canvas & WebGL --
+const canvas = document.getElementById('globe-canvas');
+const wrap   = canvas.parentElement;
+
+function resize() {
+  canvas.width  = wrap.clientWidth  * window.devicePixelRatio;
+  canvas.height = wrap.clientHeight * window.devicePixelRatio;
+  canvas.style.width  = wrap.clientWidth  + 'px';
+  canvas.style.height = wrap.clientHeight + 'px';
+}
+resize();
+window.addEventListener('resize', ()=>{ resize(); buildProjection(); });
+
+const gl = canvas.getContext('webgl', {antialias:true, alpha:false}) ||
+           canvas.getContext('experimental-webgl', {antialias:true, alpha:false});
+if (!gl) { canvas.parentElement.innerHTML='<p style="color:#f43f5e;padding:20px">WebGL not supported</p>'; return; }
+
+gl.enable(gl.DEPTH_TEST);
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+gl.clearColor(0.008, 0.016, 0.031, 1.0);
+
+// -- Shaders --
+function mkShader(type, src) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+  return s;
+}
+function mkProgram(vs, fs) {
+  const p = gl.createProgram();
+  gl.attachShader(p, mkShader(gl.VERTEX_SHADER, vs));
+  gl.attachShader(p, mkShader(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(p);
+  return p;
+}
+
+// Globe vertex shader
+const GLOBE_VS = `
+  precision highp float;
+  attribute vec3 aPos;
+  attribute vec3 aNormal;
+  attribute vec2 aUV;
+  uniform mat4 uMVP;
+  uniform mat4 uModel;
+  uniform mat3 uNormalMat;
+  varying vec3 vNormal;
+  varying vec3 vWorldPos;
+  varying vec2 vUV;
+  void main(){
+    vUV = aUV;
+    vNormal = normalize(uNormalMat * aNormal);
+    vec4 world = uModel * vec4(aPos,1.0);
+    vWorldPos = world.xyz;
+    gl_Position = uMVP * vec4(aPos,1.0);
+  }`;
+
+// Globe fragment shader - procedural earth
+const GLOBE_FS = `
+  precision highp float;
+  varying vec3 vNormal;
+  varying vec3 vWorldPos;
+  varying vec2 vUV;
+  uniform vec3 uSunDir;
+  uniform float uTime;
+
+  // Pseudo-random
+  float rand(vec2 co){ return fract(sin(dot(co,vec2(12.9898,78.233)))*43758.5453); }
+
+  // Smooth noise
+  float noise(vec2 p){
+    vec2 i=floor(p), f=fract(p);
+    f=f*f*(3.0-2.0*f);
+    float a=rand(i), b=rand(i+vec2(1,0)), c=rand(i+vec2(0,1)), d=rand(i+vec2(1,1));
+    return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);
+  }
+  float fbm(vec2 p){
+    return noise(p)*0.5+noise(p*2.1)*0.25+noise(p*4.3)*0.125+noise(p*8.7)*0.0625;
   }
 
-  const container = document.getElementById('globe-container');
-  const canvas    = document.getElementById('globe-canvas');
-  const loadBar   = document.getElementById('load-bar');
-  const loading   = document.getElementById('globe-loading');
-  const tooltip   = document.getElementById('globe-tooltip');
-
-  // ── Renderer ──
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.shadowMap.enabled = true;
-
-  // ── Scene ──
-  const scene  = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-  camera.position.z = 2.8;
-
-  // ── Lighting ──
-  const ambient = new THREE.AmbientLight(0x111827, 1.2);
-  scene.add(ambient);
-
-  // Main sunlight from upper-left
-  const sun = new THREE.DirectionalLight(0xffffff, 1.8);
-  sun.position.set(5, 3, 5);
-  scene.add(sun);
-
-  // Cool rim light from right
-  const rim = new THREE.DirectionalLight(0x0df4ff, 0.35);
-  rim.position.set(-4, -1, -4);
-  scene.add(rim);
-
-  // Violet fill from below
-  const fill = new THREE.DirectionalLight(0x8b5cf6, 0.2);
-  fill.position.set(0, -5, 2);
-  scene.add(fill);
-
-  // ── Globe group ──
-  const globeGroup = new THREE.Group();
-  scene.add(globeGroup);
-
-  const R = 1.0;
-
-  // ── Generate procedural Earth texture on canvas ──
-  function makeEarthTexture() {
-    const sz = 2048;
-    const tc = document.createElement('canvas');
-    tc.width = tc.height = sz;
-    const ctx = tc.getContext('2d');
-
-    // Deep ocean base
-    const oceanGrad = ctx.createRadialGradient(sz/2,sz/2,0,sz/2,sz/2,sz/2);
-    oceanGrad.addColorStop(0, '#0a1f3d');
-    oceanGrad.addColorStop(1, '#020c1e');
-    ctx.fillStyle = oceanGrad;
-    ctx.fillRect(0,0,sz,sz);
-
-    // Ocean depth variation
-    for (let i=0; i<600; i++) {
-      const x = Math.random()*sz, y = Math.random()*sz;
-      const r = Math.random()*80+10;
-      const g2 = ctx.createRadialGradient(x,y,0,x,y,r);
-      g2.addColorStop(0,'rgba(8,40,80,0.12)');
-      g2.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle = g2;
-      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
-    }
-
-    // ── Land masses (approximate shapes) ──
-    ctx.fillStyle = '#1a4a2e';
-    function landBlob(x, y, w, h, rx=0.5) {
-      ctx.beginPath();
-      ctx.ellipse(x,y,w,h,rx,0,Math.PI*2);
-      ctx.fill();
-    }
+  // Land detection (approximate continents from UV)
+  float isLand(vec2 uv){
+    float u=uv.x, v=uv.y;
+    float land=0.0;
     // North America
-    ctx.fillStyle = '#1e5c35';
-    landBlob(380,310,130,160,-0.3);
-    landBlob(310,370,60,80,-0.2);
-    landBlob(390,200,80,60,-0.1);
-    ctx.fillStyle = '#1a5030';
-    landBlob(355,340,100,140,-0.3);
+    if(u>0.08&&u<0.28&&v>0.25&&v<0.65) land=max(land,
+      smoothstep(0.38,0.3,abs(u-0.18))*smoothstep(0.2,0.1,abs(v-0.45)));
     // South America
-    ctx.fillStyle = '#1e5c35';
-    landBlob(430,560,90,170,0.1);
-    landBlob(390,630,60,100,0.2);
+    if(u>0.14&&u<0.30&&v>0.52&&v<0.88) land=max(land,
+      smoothstep(0.1,0.05,abs(u-0.21))*smoothstep(0.22,0.1,abs(v-0.68)));
     // Europe
-    ctx.fillStyle = '#206640';
-    landBlob(1000,280,80,70,-0.1);
-    landBlob(980,260,60,50,0.1);
-    landBlob(1030,300,50,45,-0.15);
+    if(u>0.44&&u<0.56&&v>0.15&&v<0.45) land=max(land,
+      smoothstep(0.09,0.04,abs(u-0.50))*smoothstep(0.18,0.06,abs(v-0.30)));
     // Africa
-    ctx.fillStyle = '#1e5c35';
-    landBlob(1010,450,110,180,0.1);
-    landBlob(1020,420,80,60,-0.05);
-    landBlob(990,580,70,80,0.15);
-    // Asia
-    ctx.fillStyle = '#206640';
-    landBlob(1280,300,200,150,-0.2);
-    landBlob(1350,260,160,100,-0.1);
-    landBlob(1200,280,120,100,-0.3);
-    landBlob(1450,350,100,120,0.2);
+    if(u>0.43&&u<0.60&&v>0.35&&v<0.80) land=max(land,
+      smoothstep(0.11,0.05,abs(u-0.51))*smoothstep(0.25,0.1,abs(v-0.57)));
+    // Asia main
+    if(u>0.50&&u<0.85&&v>0.10&&v<0.58) land=max(land,
+      smoothstep(0.22,0.1,abs(u-0.70))*smoothstep(0.28,0.1,abs(v-0.32)));
+    // India sub
+    if(u>0.59&&u<0.70&&v>0.38&&v<0.62) land=max(land,
+      smoothstep(0.08,0.03,abs(u-0.645))*smoothstep(0.14,0.04,abs(v-0.50)));
+    // SE Asia / Indonesia
+    if(u>0.72&&u<0.92&&v>0.43&&v<0.63) land=max(land,
+      smoothstep(0.12,0.04,abs(u-0.80))*smoothstep(0.12,0.04,abs(v-0.53)));
+    // Japan
+    if(u>0.80&&u<0.87&&v>0.22&&v<0.38) land=max(land,
+      smoothstep(0.05,0.02,abs(u-0.835))*smoothstep(0.1,0.03,abs(v-0.30)));
     // Australia
-    ctx.fillStyle = '#1e5c35';
-    landBlob(1580,580,90,70,0.1);
-    landBlob(1550,600,70,60,0.2);
-    // Antarctica hint
-    ctx.fillStyle = '#2a3a4a';
-    ctx.beginPath(); ctx.ellipse(sz/2,sz-30,sz*0.6,40,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#c8d8e8';
-    ctx.beginPath(); ctx.ellipse(sz/2,sz-20,sz*0.55,25,0,0,Math.PI*2); ctx.fill();
-    // Arctic
-    ctx.fillStyle = '#c8d8e8';
-    ctx.beginPath(); ctx.ellipse(sz/2,15,sz*0.4,20,0,0,Math.PI*2); ctx.fill();
+    if(u>0.76&&u<0.92&&v>0.56&&v<0.76) land=max(land,
+      smoothstep(0.1,0.04,abs(u-0.84))*smoothstep(0.12,0.05,abs(v-0.65)));
+    // Greenland
+    if(u>0.20&&u<0.35&&v>0.10&&v<0.32) land=max(land,
+      smoothstep(0.09,0.04,abs(u-0.275))*smoothstep(0.12,0.04,abs(v-0.21)));
+    return clamp(land*1.8,0.0,1.0);
+  }
 
-    // Land texture noise
-    for (let i=0; i<2000; i++) {
-      const x = Math.random()*sz, y = Math.random()*sz;
-      const r = Math.random()*12+2;
-      const g3 = ctx.createRadialGradient(x,y,0,x,y,r);
-      const a = (Math.random()*0.08).toFixed(2);
-      g3.addColorStop(0,`rgba(0,80,20,${a})`);
-      g3.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle = g3;
-      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  void main(){
+    vec2 uv = vUV;
+    float t = uTime;
+
+    // Noise for terrain variation
+    float tex = fbm(uv*6.0+0.5);
+    float land = isLand(uv);
+
+    // Land colours: green->brown->rocky
+    vec3 deepGreen  = vec3(0.06,0.28,0.10);
+    vec3 lightGreen = vec3(0.13,0.42,0.16);
+    vec3 desert     = vec3(0.55,0.42,0.18);
+    vec3 mountain   = vec3(0.35,0.32,0.30);
+    vec3 snow       = vec3(0.88,0.92,0.96);
+
+    float v = uv.y;
+    // Blend land based on latitude
+    vec3 landCol = mix(deepGreen, lightGreen, tex);
+    if(v<0.15||v>0.85) landCol = mix(landCol, snow, smoothstep(0.8,0.95,max(v,1.0-v)));
+    if(v>0.35&&v<0.55) landCol = mix(landCol, desert, smoothstep(0.1,0.0,land)*0.5);
+    landCol += (tex-0.5)*0.06; // terrain variation
+
+    // Ocean colours: deep to shallow
+    vec3 deepOcean   = vec3(0.01,0.06,0.18);
+    vec3 shallowOcean= vec3(0.03,0.18,0.38);
+    vec3 oceanCol = mix(deepOcean, shallowOcean, fbm(uv*3.0)*0.5);
+    // Ocean shimmer
+    float shimmer = fbm(uv*12.0 + vec2(t*0.05,0.0));
+    oceanCol += vec3(0.0,0.04,0.08)*shimmer;
+
+    // Mix land/ocean
+    vec3 surfaceCol = mix(oceanCol, landCol, land);
+
+    // Ice caps
+    float polar = smoothstep(0.85,0.99,max(v, 1.0-v));
+    surfaceCol = mix(surfaceCol, vec3(0.85,0.90,0.95), polar);
+
+    // Clouds (animated)
+    float cloud1 = fbm(uv*4.5 + vec2(t*0.012, 0.0));
+    float cloud2 = fbm(uv*8.0 + vec2(-t*0.007, t*0.004));
+    float clouds = smoothstep(0.54, 0.68, cloud1*0.6 + cloud2*0.4);
+    clouds *= (1.0-polar*0.8);
+    vec3 cloudCol = vec3(0.88,0.93,1.0);
+    surfaceCol = mix(surfaceCol, cloudCol, clouds*0.85);
+
+    // Lighting
+    vec3 N = normalize(vNormal);
+    float diff = max(0.0, dot(N, uSunDir));
+    float diffSoft = diff*0.8 + 0.2; // ambient fill
+
+    // Specular on ocean
+    vec3 viewDir = normalize(-vWorldPos);
+    vec3 halfV = normalize(uSunDir + viewDir);
+    float spec = pow(max(0.0,dot(N,halfV)),64.0) * (1.0-land) * (1.0-clouds);
+
+    vec3 col = surfaceCol * diffSoft + vec3(0.4,0.7,1.0)*spec*0.6;
+
+    // Atmosphere haze at limb
+    float rim = 1.0 - max(0.0,dot(N,viewDir));
+    rim = pow(rim,3.5);
+    col += vec3(0.05,0.40,0.70)*rim*0.6 * (diff*0.5+0.5);
+
+    // Night side city lights (faint orange glow)
+    float nightSide = 1.0-smoothstep(0.0,0.25,diff);
+    float cityDensity = land * (0.3+fbm(uv*20.0)*0.7);
+    col += vec3(1.0,0.55,0.1)*cityDensity*nightSide*0.18;
+
+    gl_FragColor = vec4(col, 1.0);
+  }`;
+
+// Atmosphere fragment shader
+const ATM_FS = `
+  precision mediump float;
+  varying vec3 vNormal;
+  varying vec3 vWorldPos;
+  varying vec2 vUV;
+  uniform vec3 uSunDir;
+  void main(){
+    vec3 N = normalize(vNormal);
+    vec3 viewDir = normalize(-vWorldPos);
+    float rim = 1.0 - max(0.0, dot(N, viewDir));
+    rim = pow(rim, 4.0);
+    float sun = max(0.0, dot(N, uSunDir))*0.5+0.5;
+    vec3 atmCol = mix(vec3(0.05,0.30,0.80), vec3(0.3,0.6,1.0), sun);
+    gl_FragColor = vec4(atmCol, rim * 0.55);
+  }`;
+
+// Marker vertex shader
+const MRK_VS = `
+  precision highp float;
+  attribute vec3 aPos;
+  uniform mat4 uMVP;
+  void main(){ gl_Position = uMVP * vec4(aPos,1.0); gl_PointSize = 8.0; }`;
+
+const MRK_FS = `
+  precision mediump float;
+  uniform vec4 uColor;
+  void main(){
+    vec2 c = gl_PointCoord - 0.5;
+    float d = length(c);
+    float circle = 1.0 - smoothstep(0.35, 0.5, d);
+    float glow   = exp(-d*d*8.0)*0.7;
+    gl_FragColor = vec4(uColor.rgb, uColor.a*(circle+glow));
+  }`;
+
+// Ring shader
+const RING_VS = `
+  precision highp float;
+  attribute vec3 aPos;
+  uniform mat4 uMVP;
+  void main(){ gl_Position = uMVP * vec4(aPos,1.0); }`;
+const RING_FS = `
+  precision mediump float;
+  uniform vec4 uColor;
+  void main(){ gl_FragColor = uColor; }`;
+
+// Star shader
+const STAR_VS = `
+  precision highp float;
+  attribute vec3 aPos;
+  attribute float aSize;
+  uniform mat4 uMVP;
+  void main(){ gl_Position = uMVP * vec4(aPos,1.0); gl_PointSize = aSize; }`;
+const STAR_FS = `
+  precision mediump float;
+  varying vec2 vUV;
+  void main(){
+    vec2 c = gl_PointCoord - 0.5;
+    float d = length(c);
+    float a = 1.0 - smoothstep(0.2, 0.5, d);
+    gl_FragColor = vec4(1.0,1.0,1.0, a*0.8);
+  }`;
+
+const globeProg = mkProgram(GLOBE_VS, GLOBE_FS);
+const atmProg   = mkProgram(GLOBE_VS, ATM_FS);
+const mrkProg   = mkProgram(MRK_VS,  MRK_FS);
+const ringProg  = mkProgram(RING_VS, RING_FS);
+const starProg  = mkProgram(STAR_VS, STAR_FS);
+
+// -- Geometry builders --
+function buildSphere(radius, segs, rings) {
+  const pos=[], nor=[], uvs=[], idx=[];
+  for(let r=0;r<=rings;r++){
+    const phi=r/rings*Math.PI;
+    for(let s=0;s<=segs;s++){
+      const theta=s/segs*Math.PI*2;
+      const x=Math.sin(phi)*Math.cos(theta);
+      const y=Math.cos(phi);
+      const z=Math.sin(phi)*Math.sin(theta);
+      pos.push(radius*x,radius*y,radius*z);
+      nor.push(x,y,z);
+      uvs.push(s/segs, r/rings);
     }
-
-    // Ocean shimmer lines (latitude lines subtle)
-    ctx.strokeStyle = 'rgba(13,244,255,0.04)';
-    ctx.lineWidth = 0.8;
-    for (let lat=-80; lat<=80; lat+=20) {
-      const y = ((90-lat)/180)*sz;
-      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(sz,y); ctx.stroke();
-    }
-    for (let lon=-180; lon<=180; lon+=30) {
-      const x = ((lon+180)/360)*sz;
-      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,sz); ctx.stroke();
-    }
-
-    return new THREE.CanvasTexture(tc);
   }
-
-  // ── Specular map ──
-  function makeSpecMap() {
-    const sz=2048, tc=document.createElement('canvas');
-    tc.width=tc.height=sz;
-    const ctx=tc.getContext('2d');
-    // Ocean = bright, land = dark
-    ctx.fillStyle='#556677'; ctx.fillRect(0,0,sz,sz);
-    ctx.fillStyle='#111';
-    // Same land positions, dark
-    function lb(x,y,w,h,r=0.5){ctx.beginPath();ctx.ellipse(x,y,w,h,r,0,Math.PI*2);ctx.fill();}
-    lb(380,310,130,160,-0.3); lb(310,370,60,80,-0.2); lb(390,200,80,60,-0.1);
-    lb(355,340,100,140,-0.3); lb(430,560,90,170,0.1); lb(390,630,60,100,0.2);
-    lb(1000,280,80,70,-0.1);  lb(980,260,60,50,0.1);  lb(1030,300,50,45,-0.15);
-    lb(1010,450,110,180,0.1); lb(1020,420,80,60,-0.05);lb(990,580,70,80,0.15);
-    lb(1280,300,200,150,-0.2);lb(1350,260,160,100,-0.1);lb(1200,280,120,100,-0.3);
-    lb(1450,350,100,120,0.2); lb(1580,580,90,70,0.1); lb(1550,600,70,60,0.2);
-    return new THREE.CanvasTexture(tc);
+  for(let r=0;r<rings;r++) for(let s=0;s<segs;s++){
+    const a=(segs+1)*r+s, b=a+(segs+1), c=b+1, d=a+1;
+    idx.push(a,b,d, b,c,d);
   }
+  return {pos:new Float32Array(pos),nor:new Float32Array(nor),
+          uvs:new Float32Array(uvs),idx:new Uint16Array(idx)};
+}
 
-  // ── Cloud texture ──
-  function makeClouds() {
-    const sz=1024, tc=document.createElement('canvas');
-    tc.width=tc.height=sz;
-    const ctx=tc.getContext('2d');
-    ctx.fillStyle='rgba(0,0,0,0)'; ctx.fillRect(0,0,sz,sz);
-    for (let i=0; i<300; i++) {
-      const x=Math.random()*sz, y=Math.random()*sz;
-      const rx=Math.random()*60+20, ry=Math.random()*25+8;
-      const a=Math.random()*0.55+0.1;
-      const g=ctx.createRadialGradient(x,y,0,x,y,rx);
-      g.addColorStop(0,`rgba(220,235,255,${a})`);
-      g.addColorStop(0.5,`rgba(220,235,255,${a*0.5})`);
-      g.addColorStop(1,'rgba(220,235,255,0)');
-      ctx.fillStyle=g;
-      ctx.save(); ctx.scale(1,ry/rx);
-      ctx.beginPath(); ctx.arc(x,y*rx/ry,rx,0,Math.PI*2); ctx.fill();
-      ctx.restore();
-    }
-    return new THREE.CanvasTexture(tc);
+function mkBuf(data,target=gl.ARRAY_BUFFER){
+  const b=gl.createBuffer(); gl.bindBuffer(target,b); gl.bufferData(target,data,gl.STATIC_DRAW); return b;
+}
+function mkDynBuf(data,target=gl.ARRAY_BUFFER){
+  const b=gl.createBuffer(); gl.bindBuffer(target,b); gl.bufferData(target,data,gl.DYNAMIC_DRAW); return b;
+}
+
+const earth = buildSphere(1.0, 96, 64);
+const ePosB=mkBuf(earth.pos); const eNorB=mkBuf(earth.nor); const eUVB=mkBuf(earth.uvs); const eIdxB=mkBuf(earth.idx,gl.ELEMENT_ARRAY_BUFFER);
+
+const atm = buildSphere(1.065, 64, 48);
+const aPosB=mkBuf(atm.pos); const aNorB=mkBuf(atm.nor); const aUVB=mkBuf(atm.uvs); const aIdxB=mkBuf(atm.idx,gl.ELEMENT_ARRAY_BUFFER);
+
+// Stars
+const NSTARS=1800;
+const starPos=new Float32Array(NSTARS*3), starSz=new Float32Array(NSTARS);
+for(let i=0;i<NSTARS;i++){
+  const th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1), r=9+Math.random()*3;
+  starPos[i*3]=r*Math.sin(ph)*Math.cos(th);
+  starPos[i*3+1]=r*Math.cos(ph);
+  starPos[i*3+2]=r*Math.sin(ph)*Math.sin(th);
+  starSz[i]=Math.random()*2.2+0.5;
+}
+const starPosB=mkBuf(starPos); const starSzB=mkBuf(starSz);
+
+// Hub 3D positions
+function latLon(lat,lon,r){
+  const phi=(90-lat)*Math.PI/180, th=(lon+180)*Math.PI/180;
+  return [-r*Math.sin(phi)*Math.cos(th), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(th)];
+}
+function scoreColor(s){
+  const t=(s-6.5)/3.0;
+  return [0.05+t*0.17, 0.96-t*0.24, 1.0-t*0.38, 1.0];
+}
+
+const HUB_R=1.015;
+const hubPositions=HUBS.map(h=>latLon(h.lat,h.lon,HUB_R));
+
+// Marker points buffer (updated each frame for pulsing)
+const mrkPosArr=new Float32Array(HUBS.length*3);
+hubPositions.forEach((p,i)=>{mrkPosArr[i*3]=p[0];mrkPosArr[i*3+1]=p[1];mrkPosArr[i*3+2]=p[2];});
+const mrkPosB=mkDynBuf(mrkPosArr);
+
+// Pulse rings: each ring is 32 line-loop segments
+function buildRing(cx,cy,cz,nx,ny,nz,r){
+  const pts=[];
+  // Build local basis perpendicular to normal
+  let ax=0,ay=1,az=0;
+  const dot2=ax*nx+ay*ny+az*nz;
+  if(Math.abs(dot2)>0.9){ax=1;ay=0;az=0;}
+  // u = normal x ax
+  let ux=ny*az-nz*ay, uy=nz*ax-nx*az, uz=nx*ay-ny*ax;
+  const ul=Math.sqrt(ux*ux+uy*uy+uz*uz); ux/=ul;uy/=ul;uz/=ul;
+  // v = normal x u
+  const vx=ny*uz-nz*uy, vy=nz*ux-nx*uz, vz=nx*uy-ny*ux;
+  const SEGS=32;
+  for(let i=0;i<=SEGS;i++){
+    const a=i/SEGS*Math.PI*2;
+    pts.push(cx+r*(Math.cos(a)*ux+Math.sin(a)*vx));
+    pts.push(cy+r*(Math.cos(a)*uy+Math.sin(a)*vy));
+    pts.push(cz+r*(Math.cos(a)*uz+Math.sin(a)*vz));
   }
+  return new Float32Array(pts);
+}
 
-  // ── Progress ──
-  loadBar.style.width='30%';
+const rings=HUBS.map((h,i)=>{
+  const p=hubPositions[i];
+  const n=[p[0]/HUB_R,p[1]/HUB_R,p[2]/HUB_R];
+  return {
+    base:buildRing(p[0],p[1],p[2],n[0],n[1],n[2],0.025),
+    buf:null, phase:i*0.35, hub:h
+  };
+});
+rings.forEach(r=>{ r.buf=mkDynBuf(r.base); });
 
-  const earthTex = makeEarthTexture();
-  loadBar.style.width='55%';
-  const specTex  = makeSpecMap();
-  loadBar.style.width='70%';
-  const cloudTex = makeClouds();
-  loadBar.style.width='85%';
-
-  // ── Earth sphere ──
-  const earthGeo  = new THREE.SphereGeometry(R, 64, 64);
-  const earthMat  = new THREE.MeshPhongMaterial({
-    map: earthTex, specularMap: specTex,
-    specular: new THREE.Color(0x4488cc), shininess: 35,
-    bumpScale: 0.02,
-  });
-  const earth = new THREE.Mesh(earthGeo, earthMat);
-  globeGroup.add(earth);
-
-  // ── Cloud layer ──
-  const cloudGeo = new THREE.SphereGeometry(R * 1.008, 48, 48);
-  const cloudMat = new THREE.MeshPhongMaterial({
-    map: cloudTex, transparent: true, opacity: 0.55,
-    depthWrite: false, blending: THREE.AdditiveBlending,
-  });
-  const clouds = new THREE.Mesh(cloudGeo, cloudMat);
-  globeGroup.add(clouds);
-
-  // ── Atmosphere glow ──
-  const atmGeo = new THREE.SphereGeometry(R * 1.06, 48, 48);
-  const atmMat = new THREE.ShaderMaterial({
-    uniforms: { c: {value:0.35}, p: {value:4.5} },
-    vertexShader: `
-      varying vec3 vNormal;
-      void main() {
-        vNormal = normalize(normalMatrix * normal);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-      }`,
-    fragmentShader: `
-      uniform float c, p;
-      varying vec3 vNormal;
-      void main() {
-        float i = pow(c - dot(vNormal, vec3(0,0,1)), p);
-        gl_FragColor = vec4(0.05, 0.55, 0.9, 1.0) * i;
-      }`,
-    side: THREE.FrontSide, blending: THREE.AdditiveBlending,
-    transparent: true, depthWrite: false,
-  });
-  const atmosphere = new THREE.Mesh(atmGeo, atmMat);
-  globeGroup.add(atmosphere);
-
-  // ── Outer glow ──
-  const outerGeo = new THREE.SphereGeometry(R * 1.18, 32, 32);
-  const outerMat = new THREE.ShaderMaterial({
-    uniforms: { c: {value:0.12}, p: {value:6.0} },
-    vertexShader: `
-      varying vec3 vNormal;
-      void main() {
-        vNormal = normalize(normalMatrix * normal);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-      }`,
-    fragmentShader: `
-      uniform float c, p;
-      varying vec3 vNormal;
-      void main() {
-        float i = pow(c - dot(vNormal, vec3(0,0,1)), p);
-        gl_FragColor = vec4(0.02, 0.75, 1.0, 0.6) * i;
-      }`,
-    side: THREE.BackSide, blending: THREE.AdditiveBlending,
-    transparent: true, depthWrite: false,
-  });
-  const outerGlow = new THREE.Mesh(outerGeo, outerMat);
-  scene.add(outerGlow);
-
-  // ── Stars ──
-  const starGeo = new THREE.BufferGeometry();
-  const starPos = new Float32Array(3000);
-  for (let i=0; i<3000; i++) {
-    const theta = Math.random()*Math.PI*2;
-    const phi   = Math.acos(2*Math.random()-1);
-    const r     = 8 + Math.random()*4;
-    starPos[i*3]   = r*Math.sin(phi)*Math.cos(theta);
-    starPos[i*3+1] = r*Math.cos(phi);
-    starPos[i*3+2] = r*Math.sin(phi)*Math.sin(theta);
+// -- Math helpers --
+function mat4(){return new Float32Array(16);}
+function identity(m){m[0]=m[5]=m[10]=m[15]=1;m[1]=m[2]=m[3]=m[4]=m[6]=m[7]=m[8]=m[9]=m[11]=m[12]=m[13]=m[14]=0;return m;}
+function multiply(a,b,out){
+  for(let i=0;i<4;i++) for(let j=0;j<4;j++){
+    out[i*4+j]=0;
+    for(let k=0;k<4;k++) out[i*4+j]+=a[i*4+k]*b[k*4+j];
   }
-  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos,3));
-  const starMat = new THREE.PointsMaterial({color:0xffffff, size:0.018, transparent:true, opacity:0.7});
-  scene.add(new THREE.Points(starGeo, starMat));
+  return out;
+}
+function perspective(fov,aspect,near,far,out){
+  const f=1/Math.tan(fov/2);
+  out[0]=f/aspect;out[5]=f;
+  out[10]=(far+near)/(near-far);out[11]=-1;
+  out[14]=2*far*near/(near-far);
+  out[1]=out[2]=out[3]=out[4]=out[6]=out[7]=out[8]=out[9]=out[12]=out[13]=out[15]=0;
+  return out;
+}
+function translate(tx,ty,tz,out){
+  identity(out); out[12]=tx;out[13]=ty;out[14]=tz; return out;
+}
+function rotY(a,out){ identity(out);const c=Math.cos(a),s=Math.sin(a);out[0]=c;out[2]=s;out[8]=-s;out[10]=c;return out;}
+function rotX(a,out){ identity(out);const c=Math.cos(a),s=Math.sin(a);out[5]=c;out[6]=-s;out[9]=s;out[10]=c;return out;}
+function normalMatrix3(m4,out3){
+  // Upper-left 3x3, transposed inverse (for uniform scale just transpose)
+  out3[0]=m4[0];out3[1]=m4[4];out3[2]=m4[8];
+  out3[3]=m4[1];out3[4]=m4[5];out3[5]=m4[9];
+  out3[6]=m4[2];out3[7]=m4[6];out3[8]=m4[10];
+  return out3;
+}
 
-  // ── Hub markers ──
-  const hubMeshes = [];
-  const pulseRings = [];
+// -- State --
+let rotY_val=0.3, rotX_val=0.18, zoom=2.8;
+let isDragging=false, prevX=0, prevY=0;
+let velX=0, velY=0, autoRot=true, autoTimer=null;
+let time=0;
 
-  function scoreColor(s) {
-    const t = (s - 6.5) / 3.0;
-    const r = Math.round(13 + t*(57-13));
-    const g = Math.round(244 + t*(255-244));
-    const b = Math.round(255 + t*(133-255));
-    return new THREE.Color(`rgb(${r},${Math.min(255,g)},${Math.min(255,b)})`);
-  }
+// -- Interaction --
+function startDrag(x,y){isDragging=true;prevX=x;prevY=y;autoRot=false;clearTimeout(autoTimer);}
+function doDrag(x,y){
+  if(!isDragging)return;
+  velY=(x-prevX)*0.007; velX=(y-prevY)*0.007;
+  rotY_val+=velY; rotX_val+=velX;
+  rotX_val=Math.max(-1.3,Math.min(1.3,rotX_val));
+  prevX=x;prevY=y;
+}
+function endDrag(){isDragging=false;autoTimer=setTimeout(()=>autoRot=true,3000);}
 
-  HUBS.forEach((hub, i) => {
-    const pos = latLonToVec3(hub.lat, hub.lon, R+0.012);
+canvas.addEventListener('mousedown',e=>{e.preventDefault();startDrag(e.clientX,e.clientY);});
+window.addEventListener('mousemove',e=>{doDrag(e.clientX,e.clientY);});
+window.addEventListener('mouseup',endDrag);
+canvas.addEventListener('touchstart',e=>{e.preventDefault();startDrag(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
+canvas.addEventListener('touchmove',e=>{e.preventDefault();doDrag(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
+canvas.addEventListener('touchend',endDrag);
+canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(1.7,Math.min(5.5,zoom+e.deltaY*0.004));},{passive:false});
 
-    // Spike
-    const spikeH = 0.012 + (hub.score-6.5)*0.018;
-    const spikeGeo = new THREE.ConeGeometry(0.008, spikeH, 6);
-    const spikeMat = new THREE.MeshBasicMaterial({
-      color: scoreColor(hub.score), transparent:true, opacity:0.9
-    });
-    const spike = new THREE.Mesh(spikeGeo, spikeMat);
-    spike.position.copy(pos);
-    spike.lookAt(new THREE.Vector3(0,0,0));
-    spike.rotateX(Math.PI/2);
-    spike.userData = hub;
-    globeGroup.add(spike);
-    hubMeshes.push(spike);
-
-    // Glow dot
-    const dotGeo = new THREE.SphereGeometry(0.009, 8, 8);
-    const dotMat = new THREE.MeshBasicMaterial({
-      color: scoreColor(hub.score), transparent:true, opacity:0.95
-    });
-    const dot = new THREE.Mesh(dotGeo, dotMat);
-    dot.position.copy(pos);
-    dot.userData = hub;
-    globeGroup.add(dot);
-    hubMeshes.push(dot);
-
-    // Pulse ring
-    const ringGeo = new THREE.RingGeometry(0.012, 0.018, 16);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: scoreColor(hub.score), transparent:true, opacity:0.6,
-      side: THREE.DoubleSide, depthWrite:false
-    });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.position.copy(pos);
-    ring.lookAt(new THREE.Vector3(0,0,0));
-    ring.userData = { phase: i * 0.4, hub };
-    globeGroup.add(ring);
-    pulseRings.push(ring);
-  });
-
-  loadBar.style.width='100%';
-  setTimeout(() => { loading.style.opacity='0'; loading.style.transition='opacity 0.5s'; setTimeout(()=>loading.style.display='none',500); }, 200);
-
-  // ── Interaction: drag ──
-  let isDragging=false, prevMouse={x:0,y:0};
-  let rotVel={x:0,y:0};
-  let autoRotate=true;
-
-  canvas.addEventListener('mousedown', e => {
-    isDragging=true; autoRotate=false;
-    prevMouse={x:e.clientX,y:e.clientY};
-    canvas.style.cursor='grabbing';
-  });
-  window.addEventListener('mouseup', () => {
-    isDragging=false; canvas.style.cursor='grab';
-    setTimeout(()=>autoRotate=true, 3000);
-  });
-  window.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    const dx=(e.clientX-prevMouse.x)*0.005;
-    const dy=(e.clientY-prevMouse.y)*0.005;
-    rotVel.x=dy; rotVel.y=dx;
-    globeGroup.rotation.y+=dx;
-    globeGroup.rotation.x+=dy;
-    globeGroup.rotation.x=Math.max(-Math.PI/2.2,Math.min(Math.PI/2.2,globeGroup.rotation.x));
-    prevMouse={x:e.clientX,y:e.clientY};
-  });
-
-  // ── Touch support ──
-  let prevTouch=null;
-  canvas.addEventListener('touchstart', e => {
-    prevTouch={x:e.touches[0].clientX,y:e.touches[0].clientY};
-    autoRotate=false; e.preventDefault();
-  },{passive:false});
-  canvas.addEventListener('touchmove', e => {
-    if(!prevTouch) return;
-    const dx=(e.touches[0].clientX-prevTouch.x)*0.005;
-    const dy=(e.touches[0].clientY-prevTouch.y)*0.005;
-    globeGroup.rotation.y+=dx;
-    globeGroup.rotation.x+=dy;
-    globeGroup.rotation.x=Math.max(-Math.PI/2.2,Math.min(Math.PI/2.2,globeGroup.rotation.x));
-    prevTouch={x:e.touches[0].clientX,y:e.touches[0].clientY};
-    e.preventDefault();
-  },{passive:false});
-  canvas.addEventListener('touchend', () => {
-    prevTouch=null; setTimeout(()=>autoRotate=true,3000);
-  });
-
-  // ── Scroll to zoom ──
-  canvas.addEventListener('wheel', e => {
-    camera.position.z=Math.max(1.6,Math.min(5.0,camera.position.z+e.deltaY*0.003));
-    e.preventDefault();
-  },{passive:false});
-
-  // ── Hover tooltip ──
-  const raycaster = new THREE.Raycaster();
-  const mouse2    = new THREE.Vector2();
-  raycaster.params.Points={threshold:0.05};
-
-  canvas.addEventListener('mousemove', e => {
-    const rect = canvas.getBoundingClientRect();
-    mouse2.x=((e.clientX-rect.left)/rect.width)*2-1;
-    mouse2.y=-((e.clientY-rect.top)/rect.height)*2+1;
-    raycaster.setFromCamera(mouse2,camera);
-    const hits=raycaster.intersectObjects(hubMeshes,false);
-    if(hits.length>0 && hits[0].object.userData.city) {
-      const hub=hits[0].object.userData;
-      document.getElementById('tt-city').textContent=hub.city;
-      document.getElementById('tt-score').textContent=hub.score;
-      document.getElementById('tt-startups').textContent=hub.startups.toLocaleString();
-      document.getElementById('tt-bar').style.width=((hub.score-6)/(10-6)*100)+'%';
-      tooltip.style.display='block';
-      tooltip.style.left=(e.clientX-rect.left+16)+'px';
-      tooltip.style.top=(e.clientY-rect.top-20)+'px';
-    } else {
-      tooltip.style.display='none';
+// -- Tooltip hit-test --
+const tooltip=document.getElementById('tt');
+const W=canvas.parentElement;
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)/rect.width*2-1;
+  const my=-((e.clientY-rect.top)/rect.height)*2+1;
+  // Project each hub and test distance in screen space
+  let closest=null, closestDist=0.04;
+  HUBS.forEach((hub,i)=>{
+    const p=hubPositions[i];
+    // Apply rotation
+    const cosY=Math.cos(-rotY_val),sinY=Math.sin(-rotY_val);
+    const cosX=Math.cos(-rotX_val),sinX=Math.sin(-rotX_val);
+    // rotY
+    let rx=p[0]*cosY+p[2]*sinY, ry=p[1], rz=-p[0]*sinY+p[2]*cosY;
+    // rotX
+    let rrx=rx, rry=ry*cosX-rz*sinX, rrz=ry*sinX+rz*cosX;
+    // perspective
+    const aspect=canvas.width/canvas.height;
+    const f=1/Math.tan(0.7);
+    const zc=rrz-zoom;
+    const sx=rrx/(-zc)*f/aspect;
+    const sy=rry/(-zc)*f;
+    const d=Math.sqrt((sx-mx)*(sx-mx)+(sy-my)*(sy-my));
+    if(d<closestDist && rrz < 0.8){
+      closestDist=d; closest={hub,sx,sy,e};
     }
   });
-  canvas.addEventListener('mouseleave', ()=>tooltip.style.display='none');
-
-  // ── Resize ──
-  function onResize() {
-    const w=container.clientWidth, h=container.clientHeight;
-    renderer.setSize(w,h);
-    camera.aspect=w/h; camera.updateProjectionMatrix();
+  if(closest){
+    const {hub,e:ev}=closest;
+    document.getElementById('tt-city').textContent=hub.city;
+    document.getElementById('tt-score').textContent=hub.score;
+    document.getElementById('tt-startups').textContent=hub.startups.toLocaleString();
+    document.getElementById('tt-bar').style.width=((hub.score-6.5)/(10-6.5)*100)+'%';
+    document.getElementById('tt-rank').textContent='RANK #'+hub.rank+' GLOBALLY';
+    tooltip.style.display='block';
+    tooltip.style.left=(e.clientX-rect.left+18)+'px';
+    tooltip.style.top=(e.clientY-rect.top-10)+'px';
+  } else {
+    tooltip.style.display='none';
   }
-  window.addEventListener('resize',onResize);
+});
+canvas.addEventListener('mouseleave',()=>tooltip.style.display='none');
 
-  // ── Animation loop ──
-  let t=0;
-  function animate() {
-    requestAnimationFrame(animate);
-    t+=0.012;
-    if(autoRotate) globeGroup.rotation.y+=0.0015;
-    else {
-      rotVel.x*=0.88; rotVel.y*=0.88;
-    }
-    clouds.rotation.y+=0.0004;
+// -- Uniforms helper --
+function ul(prog,name){return gl.getUniformLocation(prog,name);}
+function al(prog,name){return gl.getAttribLocation(prog,name);}
 
-    // Pulse rings
-    pulseRings.forEach(ring => {
-      const phase=(t+ring.userData.phase)%(Math.PI*2);
-      const scale=1+Math.sin(phase)*0.6;
-      ring.scale.setScalar(scale);
-      ring.material.opacity=0.5*(1-scale/1.6);
-    });
+function bindAttr(prog,name,buf,size,stride=0,offset=0){
+  const loc=al(prog,name); if(loc<0)return;
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc,size,gl.FLOAT,false,stride*4,offset*4);
+}
 
-    // Hub brightness pulse
-    hubMeshes.forEach((m,i) => {
-      if(m.geometry.type==='SphereGeometry') {
-        m.material.opacity=0.75+Math.sin(t*1.5+i*0.5)*0.2;
-      }
-    });
+// -- Render --
+const tmp=mat4(), mModel=mat4(), mRX=mat4(), mRY=mat4(), mTrans=mat4();
+const mProj=mat4(), mMV=mat4(), mMVP=mat4();
+const mNorm=new Float32Array(9);
 
-    renderer.render(scene,camera);
+function render(ts){
+  requestAnimationFrame(render);
+  time=ts*0.001;
+
+  if(autoRot) rotY_val+=0.0015;
+  if(!isDragging){ velX*=0.88; velY*=0.88; }
+
+  const W=canvas.width, H=canvas.height;
+  gl.viewport(0,0,W,H);
+  gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+
+  // Build matrices
+  perspective(0.75, W/H, 0.1, 50.0, mProj);
+  translate(0,0,-zoom,mTrans);
+  rotX(rotX_val,mRX); rotY(rotY_val,mRY);
+  multiply(mRX,mRY,tmp); multiply(mTrans,tmp,mModel);
+  multiply(mProj,mModel,mMVP);
+  normalMatrix3(mModel,mNorm);
+
+  const sunDir=[-0.6,0.5,0.7]; // normalize
+  const sl=Math.sqrt(sunDir[0]*sunDir[0]+sunDir[1]*sunDir[1]+sunDir[2]*sunDir[2]);
+  sunDir[0]/=sl;sunDir[1]/=sl;sunDir[2]/=sl;
+
+  // -- Stars (no model transform) --
+  gl.depthMask(false);
+  gl.useProgram(starProg);
+  perspective(0.75,W/H,0.1,50,tmp);
+  translate(0,0,0,mTrans);
+  gl.uniformMatrix4fv(ul(starProg,'uMVP'),false,tmp);
+  bindAttr(starProg,'aPos',starPosB,3);
+  gl.bindBuffer(gl.ARRAY_BUFFER,starSzB);
+  const szLoc=al(starProg,'aSize'); if(szLoc>=0){
+    gl.enableVertexAttribArray(szLoc);
+    gl.vertexAttribPointer(szLoc,1,gl.FLOAT,false,0,0);
   }
-  animate();
+  gl.drawArrays(gl.POINTS,0,NSTARS);
+  gl.depthMask(true);
+
+  // -- Globe --
+  gl.useProgram(globeProg);
+  gl.uniformMatrix4fv(ul(globeProg,'uMVP'),false,mMVP);
+  gl.uniformMatrix4fv(ul(globeProg,'uModel'),false,mModel);
+  gl.uniformMatrix3fv(ul(globeProg,'uNormalMat'),false,mNorm);
+  gl.uniform3fv(ul(globeProg,'uSunDir'),sunDir);
+  gl.uniform1f(ul(globeProg,'uTime'),time);
+  bindAttr(globeProg,'aPos',ePosB,3);
+  bindAttr(globeProg,'aNormal',eNorB,3);
+  bindAttr(globeProg,'aUV',eUVB,2);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,eIdxB);
+  gl.drawElements(gl.TRIANGLES,earth.idx.length,gl.UNSIGNED_SHORT,0);
+
+  // -- Atmosphere --
+  gl.depthMask(false);
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+  gl.useProgram(atmProg);
+
+  const atmModel=mat4(), atmTrans=mat4(), atmTmp=mat4();
+  translate(0,0,-zoom,atmTrans);
+  rotX(rotX_val,mRX); rotY(rotY_val,mRY);
+  multiply(mRX,mRY,atmTmp); multiply(atmTrans,atmTmp,atmModel);
+  multiply(mProj,atmModel,tmp);
+  gl.uniformMatrix4fv(ul(atmProg,'uMVP'),false,tmp);
+  gl.uniformMatrix4fv(ul(atmProg,'uModel'),false,atmModel);
+  gl.uniformMatrix3fv(ul(atmProg,'uNormalMat'),false,mNorm);
+  gl.uniform3fv(ul(atmProg,'uSunDir'),sunDir);
+  gl.uniform1f(ul(atmProg,'uTime'),time);
+  bindAttr(atmProg,'aPos',aPosB,3);
+  bindAttr(atmProg,'aNormal',aNorB,3);
+  bindAttr(atmProg,'aUV',aUVB,2);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,aIdxB);
+  gl.drawElements(gl.TRIANGLES,atm.idx.length,gl.UNSIGNED_SHORT,0);
+
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  gl.depthMask(true);
+
+  // -- Pulse rings --
+  gl.depthMask(false);
+  gl.useProgram(ringProg);
+  HUBS.forEach((hub,i)=>{
+    const ring=rings[i];
+    const phase=(time*1.8+ring.phase)%(Math.PI*2);
+    const scale=1.0+Math.sin(phase)*1.2;
+    const opacity=Math.max(0,0.7*(1.0-scale/2.2));
+    if(opacity<=0)return;
+
+    // Scale ring outward from center
+    const p=hubPositions[i];
+    const n=[p[0]/HUB_R,p[1]/HUB_R,p[2]/HUB_R];
+    const sc=buildRing(p[0],p[1],p[2],n[0],n[1],n[2],0.025*scale);
+    gl.bindBuffer(gl.ARRAY_BUFFER,ring.buf);
+    gl.bufferData(gl.ARRAY_BUFFER,sc,gl.DYNAMIC_DRAW);
+
+    gl.uniformMatrix4fv(ul(ringProg,'uMVP'),false,mMVP);
+    const col=scoreColor(hub.score);
+    gl.uniform4fv(ul(ringProg,'uColor'),[col[0],col[1],col[2],opacity]);
+    bindAttr(ringProg,'aPos',ring.buf,3);
+    gl.drawArrays(gl.LINE_STRIP,0,33);
+  });
+  gl.depthMask(true);
+
+  // -- Hub markers --
+  gl.depthMask(false);
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+  gl.useProgram(mrkProg);
+  gl.uniformMatrix4fv(ul(mrkProg,'uMVP'),false,mMVP);
+
+  HUBS.forEach((hub,i)=>{
+    const col=scoreColor(hub.score);
+    const pulse=0.85+Math.sin(time*2.0+i*0.6)*0.15;
+    gl.uniform4fv(ul(mrkProg,'uColor'),[col[0],col[1],col[2],pulse]);
+    gl.bindBuffer(gl.ARRAY_BUFFER,mrkPosB);
+    const loc=al(mrkProg,'aPos'); if(loc<0)return;
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc,3,gl.FLOAT,false,0,i*12);
+    gl.drawArrays(gl.POINTS,0,1);
+  });
+
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  gl.depthMask(true);
+}
+requestAnimationFrame(render);
+
 })();
 </script>
 """)
@@ -1790,7 +1525,7 @@ with tabs[6]:
         area = st.selectbox("Therapeutic Area",
             ["Oncology","CNS / Neurology","Cardiovascular","Infectious Disease","Rare Disease","Autoimmune"])
         phase = st.selectbox("Trial Phase",
-            ["Phase I → II","Phase II → III","Phase III → Approval"],
+            ["Phase I &rarr; II","Phase II &rarr; III","Phase III &rarr; Approval"],
             index=1)
         company = st.selectbox("Company Track Record",
             ["Startup (<2 approvals)","Mid-tier (2-5 approvals)","Big Pharma (10+ approvals)"],
@@ -1854,7 +1589,7 @@ with tabs[6]:
 # ══════════════════════════════════════════════
 with tabs[7]:
     section_hdr("🕸️","Global Disease–Drug Network Graph",
-        "Disease → Target Protein → Drug pathways · Hidden relationship discovery")
+        "Disease &rarr; Target Protein &rarr; Drug pathways · Hidden relationship discovery")
 
     col1, col2 = st.columns([6,4])
     with col1:
@@ -1996,13 +1731,14 @@ with tabs[9]:
           <div style="font-size:9px;color:{color};font-family:DM Mono,monospace;letter-spacing:0.1em">{badge}</div>
         </div>""")
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # FOOTER
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 st.html("<div style='height:24px'></div>")
+footer_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
 st.html(f"""
 <div style="text-align:center;padding:16px;border-top:1px solid rgba(0,212,255,0.1);
   font-family:DM Mono,monospace;font-size:9px;color:#4a6080;letter-spacing:0.1em">
   GLOBAL DRUG INTELLIGENCE MONITOR · DATA SOURCES: FDA · WHO · PUBMED · CLINICALTRIALS.GOV ·
-  LAST UPDATE: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}
+  LAST UPDATE: {footer_time}
 </div>""")
