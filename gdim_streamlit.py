@@ -1176,38 +1176,83 @@ const globeMat=new THREE.ShaderMaterial({
     float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
       return mix(mix(rand(i),rand(i+vec2(1,0)),f.x),mix(rand(i+vec2(0,1)),rand(i+vec2(1,1)),f.x),f.y);}
     float fbm(vec2 p){return noise(p)*.5+noise(p*2.1)*.25+noise(p*4.3)*.125+noise(p*8.7)*.0625;}
+
+    // Three.js SphereGeometry UVs: u=0..1 west-to-east, v=0..1 south-to-north
+    // Convert to lon (-PI..PI) and lat (-PI/2..PI/2)
     float isLand(vec2 uv){
-      float u=uv.x,v=uv.y,l=0.;
-      if(u>.08&&u<.28&&v>.25&&v<.65) l=max(l,smoothstep(.38,.3,abs(u-.18))*smoothstep(.2,.1,abs(v-.45)));
-      if(u>.14&&u<.30&&v>.52&&v<.88) l=max(l,smoothstep(.1,.05,abs(u-.21))*smoothstep(.22,.1,abs(v-.68)));
-      if(u>.44&&u<.56&&v>.15&&v<.45) l=max(l,smoothstep(.09,.04,abs(u-.50))*smoothstep(.18,.06,abs(v-.30)));
-      if(u>.43&&u<.60&&v>.35&&v<.80) l=max(l,smoothstep(.11,.05,abs(u-.51))*smoothstep(.25,.1,abs(v-.57)));
-      if(u>.50&&u<.85&&v>.10&&v<.58) l=max(l,smoothstep(.22,.1,abs(u-.70))*smoothstep(.28,.1,abs(v-.32)));
-      if(u>.59&&u<.70&&v>.38&&v<.62) l=max(l,smoothstep(.08,.03,abs(u-.645))*smoothstep(.14,.04,abs(v-.50)));
-      if(u>.72&&u<.92&&v>.43&&v<.63) l=max(l,smoothstep(.12,.04,abs(u-.80))*smoothstep(.12,.04,abs(v-.53)));
-      if(u>.76&&u<.92&&v>.56&&v<.76) l=max(l,smoothstep(.1,.04,abs(u-.84))*smoothstep(.12,.05,abs(v-.65)));
-      return clamp(l*1.8,0.,1.);
+      // lon: 0=left(~180W) to 1=right(~180E); lat: 0=south, 1=north
+      float lon = uv.x;   // 0..1
+      float lat = uv.y;   // 0=south pole, 1=north pole, 0.5=equator
+      float l = 0.0;
+
+      // North America (lon 0.05-0.28, lat 0.35-0.80)
+      l=max(l, smoothstep(0.14,0.04,abs(lon-0.155))*smoothstep(0.22,0.08,abs(lat-0.60)));
+      // Central America
+      l=max(l, smoothstep(0.06,0.02,abs(lon-0.185))*smoothstep(0.08,0.02,abs(lat-0.44)));
+      // Greenland
+      l=max(l, smoothstep(0.07,0.02,abs(lon-0.275))*smoothstep(0.08,0.02,abs(lat-0.80)));
+      // South America (lon 0.14-0.30, lat 0.10-0.47)
+      l=max(l, smoothstep(0.09,0.03,abs(lon-0.215))*smoothstep(0.19,0.06,abs(lat-0.30)));
+      // Europe (lon 0.44-0.57, lat 0.55-0.78)
+      l=max(l, smoothstep(0.08,0.03,abs(lon-0.500))*smoothstep(0.13,0.04,abs(lat-0.67)));
+      // Scandinavia bump
+      l=max(l, smoothstep(0.04,0.01,abs(lon-0.505))*smoothstep(0.05,0.01,abs(lat-0.76)));
+      // Africa (lon 0.44-0.60, lat 0.20-0.62)
+      l=max(l, smoothstep(0.10,0.04,abs(lon-0.515))*smoothstep(0.22,0.08,abs(lat-0.42)));
+      // Middle East / Arabia
+      l=max(l, smoothstep(0.07,0.02,abs(lon-0.575))*smoothstep(0.08,0.02,abs(lat-0.57)));
+      // Asia main (lon 0.50-0.88, lat 0.52-0.85)
+      l=max(l, smoothstep(0.22,0.08,abs(lon-0.695))*smoothstep(0.19,0.06,abs(lat-0.67)));
+      // India subcontinent
+      l=max(l, smoothstep(0.06,0.02,abs(lon-0.640))*smoothstep(0.09,0.02,abs(lat-0.50)));
+      // SE Asia / Indochina
+      l=max(l, smoothstep(0.07,0.02,abs(lon-0.730))*smoothstep(0.06,0.02,abs(lat-0.54)));
+      // Japan
+      l=max(l, smoothstep(0.03,0.01,abs(lon-0.833))*smoothstep(0.05,0.01,abs(lat-0.67)));
+      // Korea
+      l=max(l, smoothstep(0.02,0.005,abs(lon-0.815))*smoothstep(0.04,0.01,abs(lat-0.65)));
+      // Australia (lon 0.76-0.93, lat 0.20-0.42)
+      l=max(l, smoothstep(0.10,0.03,abs(lon-0.845))*smoothstep(0.12,0.04,abs(lat-0.33)));
+      // New Zealand
+      l=max(l, smoothstep(0.03,0.01,abs(lon-0.920))*smoothstep(0.04,0.01,abs(lat-0.28)));
+      // Antarctica (lat < 0.06)
+      l=max(l, smoothstep(0.08,0.0,lat-0.0)*0.9);
+
+      return clamp(l*2.0, 0.0, 1.0);
     }
+
     void main(){
       float land=isLand(vUV);
       float tex=fbm(vUV*6.);
-      vec3 ocean=mix(vec3(.01,.06,.18),vec3(.03,.18,.38),fbm(vUV*3.)*.5);
-      ocean+=vec3(0.,.04,.08)*fbm(vUV*12.+vec2(uTime*.05,0.));
-      vec3 lnd=mix(vec3(.06,.28,.10),vec3(.13,.42,.16),tex);
-      float polar=smoothstep(.85,.99,max(vUV.y,1.-vUV.y));
-      lnd=mix(lnd,vec3(.88,.92,.96),polar);
+      vec3 ocean=mix(vec3(.01,.06,.20),vec3(.04,.20,.42),fbm(vUV*3.)*.5);
+      ocean+=vec3(0.,.04,.10)*fbm(vUV*12.+vec2(uTime*.05,0.));
+      vec3 lnd=mix(vec3(.07,.30,.11),vec3(.15,.44,.17),tex);
+      // Desert tones in tropics
+      float tropics=smoothstep(0.08,0.0,abs(vUV.y-0.42))*land;
+      lnd=mix(lnd,vec3(.52,.40,.16),tropics*.4);
+      // Snow poles — v<0.08 south, v>0.92 north
+      float polar=smoothstep(.88,1.0,vUV.y)+smoothstep(.12,0.0,vUV.y);
+      lnd=mix(lnd,vec3(.90,.93,.97),clamp(polar,0.,1.));
+      ocean=mix(ocean,vec3(.82,.88,.95),clamp(polar,0.,1.));
       vec3 surf=mix(ocean,lnd,land);
-      float cloud=smoothstep(.54,.68,fbm(vUV*4.5+vec2(uTime*.012,0.))*.6+fbm(vUV*8.-vec2(uTime*.007,0.))*.4);
-      surf=mix(surf,vec3(.88,.93,1.),cloud*(1.-polar*.8)*.85);
+      // Clouds
+      float cloud=smoothstep(.53,.70,
+        fbm(vUV*4.5+vec2(uTime*.012,0.))*.6+
+        fbm(vUV*8.5-vec2(uTime*.007,uTime*.003))*.4);
+      cloud*=(1.-clamp(polar*1.2,0.,1.)*.7);
+      surf=mix(surf,vec3(.90,.94,1.),cloud*.88);
+      // Lighting
       vec3 N=normalize(vNormal);
       float diff=max(0.,dot(N,uSunDir))*.8+.2;
       vec3 view=normalize(-vPos);
-      float spec=pow(max(0.,dot(reflect(-uSunDir,N),view)),48.)*(1.-land)*(1.-cloud)*.5;
+      float spec=pow(max(0.,dot(reflect(-uSunDir,N),view)),48.)*(1.-land)*(1.-cloud)*.6;
       vec3 col=surf*diff+vec3(.4,.7,1.)*spec;
+      // Atmosphere rim
       float rim=pow(1.-max(0.,dot(N,view)),4.)*(.5+.5*max(0.,dot(N,uSunDir)));
-      col+=vec3(.05,.35,.8)*rim*.7;
-      float night=1.-smoothstep(0.,.25,max(0.,dot(N,uSunDir)));
-      col+=vec3(1.,.55,.1)*land*(fbm(vUV*20.)*.7+.3)*night*.2;
+      col+=vec3(.05,.35,.85)*rim*.8;
+      // Night city lights
+      float night=1.-smoothstep(0.,.3,max(0.,dot(N,uSunDir)));
+      col+=vec3(1.,.6,.15)*land*(fbm(vUV*22.)*.7+.3)*night*.22;
       gl_FragColor=vec4(col,1.);
     }`,
 });
