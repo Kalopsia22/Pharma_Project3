@@ -628,19 +628,24 @@ def chart_trial_gauge(prob, label):
     return fig
 
 def chart_phase_waterfall():
-    fig = go.Figure(go.Waterfall(
-        x=["Phase I Entry","Phase I→II","Phase II→III","Phase III→Approval","Overall"],
-        measure=["absolute","relative","relative","relative","total"],
-        y=[100,-37,-44,24,-88], base=[0,100,63,19,0],
-        textposition="outside",text=["100%","63%","31%","58%","12%"],
-        textfont=dict(size=10,family="DM Mono,monospace"),
-        connector=dict(line=dict(color="rgba(255,255,255,0.1)")),
-        increasing=dict(marker_color=C["accent3"]),decreasing=dict(marker_color=C["danger"]),
-        totals=dict(marker_color=C["text3"]),
+    phases = ["Phase I", "Phase I→II", "Phase II→III", "Ph III→Approval", "Overall"]
+    rates  = [100, 63, 31, 58, 12]
+    colors = [C["accent"], C["accent3"], C["warning"], C["accent3"], C["danger"]]
+    fig = go.Figure(go.Bar(
+        x=phases, y=rates,
+        marker=dict(color=colors, opacity=0.85, line=dict(width=0)),
+        text=[f"{r}%" for r in rates],
+        textposition="outside",
+        textfont=dict(size=11, family="DM Mono,monospace"),
+        hovertemplate="<b>%{x}</b><br>Success Rate: %{y}%<extra></extra>",
     ))
+    fig.add_hline(y=12, line_dash="dot", line_color=C["danger"],
+                  annotation_text="Overall 12%",
+                  annotation_font=dict(size=9, color=C["danger"]))
     apply_base(fig, height=280,
-        yaxis=dict(**GY,title="Success Rate (%)",range=[0,115]),
-        margin=dict(l=10,r=10,t=30,b=10))
+        yaxis=dict(**GY, title="Success Rate (%)", range=[0, 125]),
+        xaxis=dict(**GX, tickfont=dict(size=9)),
+        margin=dict(l=10, r=10, t=30, b=60))
     return fig
 
 def chart_gap_scatter():
