@@ -1059,10 +1059,14 @@ with tabs[4]:
     st.html("<div style='height:16px'></div>")
 
     ptitle("Global Pharmaceutical Innovation Density — Interactive 3D Globe")
-    st.html("""
+    import streamlit.components.v1 as components
+    components.html("""<!DOCTYPE html>
+<html><head><meta charset="utf-8">
 <style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#020408;overflow:hidden;}
   .globe-wrap {
-    width:100%; height:560px; position:relative; border-radius:16px; overflow:hidden;
+    width:100vw; height:560px; position:relative; overflow:hidden;
     border:1px solid rgba(13,244,255,0.12); background:#020408;
   }
   #globe-canvas { width:100%; height:100%; display:block; cursor:grab; touch-action:none; }
@@ -1089,7 +1093,7 @@ with tabs[4]:
   #tt-bar { height:100%;border-radius:2px;background:linear-gradient(90deg,#0df4ff,#8b5cf6); }
   #tt-rank { font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a5068;margin-top:6px;letter-spacing:0.1em; }
 </style>
-
+</head><body>
 <div class="globe-wrap">
   <div class="hud-hint">🌐 Drag · Scroll to zoom · Hover markers</div>
   <div class="hud-badge"><span class="hud-dot"></span>18 Pharma Hubs · Live</div>
@@ -1264,7 +1268,8 @@ function render(ts){
 requestAnimationFrame(render);
 })();
 </script>
-""")
+</body></html>
+""", height=580, scrolling=False)
 
     col1, col2 = st.columns([1, 1])
     with col1:
