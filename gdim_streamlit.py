@@ -395,6 +395,7 @@ st.html("""
 </style>
 """)
 # HEADER
+now_str = datetime.utcnow().strftime("%H:%M:%S UTC")
 st.html(f"""
 <div class="gdim-header">
   <div style="display:flex;align-items:center;gap:14px">
