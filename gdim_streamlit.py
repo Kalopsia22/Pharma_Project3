@@ -1193,17 +1193,24 @@ with tabs[8]:
 
     with col2:
         ptitle("Pharma Risk Scorecard")
-        hcols = st.columns([2.5,0.8,0.8,1,1,1,1])
-        for hc, ht in zip(hcols, ["Country","Score","Grade","Shortage","Reg. Delay","Supply","Trials"]):
-            st.html(f'<div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
+        tbl = '<table style="width:100%;border-collapse:collapse;font-family:DM Mono,monospace">'
+        tbl += '<thead><tr>'
+        for h in ["Country","Score","Grade","Shortage","Reg. Delay","Supply","Trials"]:
+            tbl += f'<th style="padding:6px 10px;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#4a6080;text-align:left;border-bottom:1px solid rgba(0,212,255,0.15)">{h}</th>'
+        tbl += '</tr></thead><tbody>'
         for r in COUNTRY_RISK:
-            risk_color = C["danger"] if r[1]>70 else C["warning"] if r[1]>45 else C["success"]
-            rc = st.columns([2.5,0.8,0.8,1,1,1,1])
-            st.html(f'<div style="font-size:12px;color:#e2eaf5;font-weight:600;padding:3px 0">{r[0]}</div>')
-            st.html(f'<div style="font-size:14px;font-weight:700;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[1]}</div>')
-            st.html(f'<div style="font-size:12px;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[2]}</div>')
-            for i, val in enumerate([r[3],r[4],r[5],r[6]]):
-                rc[3+i].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;padding:3px 0">{val}</div>')
+            rc = C["danger"] if r[1]>70 else C["warning"] if r[1]>45 else C["success"]
+            tbl += f'<tr style="border-bottom:1px solid rgba(255,255,255,0.04)">'
+            tbl += f'<td style="padding:7px 10px;font-size:12px;color:#e2eaf5;font-weight:600">{r[0]}</td>'
+            tbl += f'<td style="padding:7px 10px;font-size:14px;font-weight:700;color:{rc};font-family:DM Mono,monospace">{r[1]}</td>'
+            tbl += f'<td style="padding:7px 10px;font-size:12px;color:{rc};font-family:DM Mono,monospace">{r[2]}</td>'
+            tbl += f'<td style="padding:7px 10px;font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace">{r[3]}</td>'
+            tbl += f'<td style="padding:7px 10px;font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace">{r[4]}</td>'
+            tbl += f'<td style="padding:7px 10px;font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace">{r[5]}</td>'
+            tbl += f'<td style="padding:7px 10px;font-size:10px;color:#00ff9d;font-family:DM Mono,monospace">{r[6]}</td>'
+            tbl += '</tr>'
+        tbl += '</tbody></table>'
+        st.html(tbl)
 
 # ══════════════════════════════════════════════
 # TAB 10 — RESEARCH GAPS
