@@ -1065,7 +1065,7 @@ with tabs[4]:
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{width:100%;height:100%;background:#020408;overflow:hidden;}
-  #c{width:100%;height:100%;display:block;}
+  canvas#c{width:100%;height:100%;display:block;}
   #hud-hint{position:fixed;top:12px;left:14px;font-family:'JetBrains Mono',monospace;
     font-size:8px;color:rgba(13,244,255,0.45);letter-spacing:0.16em;text-transform:uppercase;pointer-events:none;}
   #hud-badge{position:fixed;top:12px;right:14px;font-family:'JetBrains Mono',monospace;
@@ -1122,16 +1122,166 @@ const HUBS=[
   {city:"Sao Paulo, BR",   lat:-23.55, lon:-46.63, score:6.8, startups:390,  rank:18},
 ];
 
-// Scene setup
-const W=window.innerWidth, H=window.innerHeight;
-const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true,alpha:false});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setSize(W,H);
-renderer.setClearColor(0x020408,1);
+// ── Build equirectangular earth texture on a 2D canvas ──────────────────────
+function makeEarthTexture(){
+  const W=2048, H=1024;
+  const cv=document.createElement('canvas');
+  cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
 
+  // Helper: lon(-180..180), lat(-90..90) → pixel x,y
+  function px(lon,lat){ return [(lon+180)/360*W, (90-lat)/180*H]; }
+  function poly(pts,fill,stroke){
+    ctx.beginPath();
+    pts.forEach((p,i)=>{ const [x,y]=px(p[0],p[1]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+    ctx.closePath();
+    if(fill){ctx.fillStyle=fill;ctx.fill();}
+    if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=0.5;ctx.stroke();}
+  }
+
+  // Ocean background
+  const og=ctx.createLinearGradient(0,0,0,H);
+  og.addColorStop(0,'#0a1f3d'); og.addColorStop(0.5,'#0d2a50'); og.addColorStop(1,'#081428');
+  ctx.fillStyle=og; ctx.fillRect(0,0,W,H);
+
+  // Subtle ocean texture via noise-like pattern
+  ctx.globalAlpha=0.03;
+  for(let i=0;i<W;i+=4) for(let j=0;j<H;j+=4){
+    if(Math.random()>0.7){ctx.fillStyle='#4af';ctx.fillRect(i,j,2,2);}
+  }
+  ctx.globalAlpha=1;
+
+  const LAND='#1a4a1e', LAND2='#1e5522', DESERT='#6b5530', BORDER='rgba(0,255,100,0.08)';
+
+  // ── NORTH AMERICA ─────────────────────────────────────────────────────────
+  poly([[-168,72],[-140,72],[-120,60],[-110,49],[-95,49],[-83,46],[-76,44],
+        [-70,47],[-66,45],[-60,47],[-64,44],[-66,42],[-74,40],[-75,35],
+        [-80,32],[-82,30],[-85,30],[-90,29],[-94,30],[-97,26],[-100,22],
+        [-105,20],[-110,24],[-115,30],[-120,34],[-124,37],[-124,46],
+        [-130,54],[-133,56],[-135,58],[-140,60],[-148,60],[-152,58],
+        [-158,58],[-162,60],[-165,62],[-168,66]],LAND,BORDER);
+
+  // ── GREENLAND ──────────────────────────────────────────────────────────────
+  poly([[-70,84],[-30,83],[-20,75],[-18,72],[-24,68],[-30,65],[-44,60],
+        [-50,62],[-54,66],[-60,70],[-65,75],[-68,80]],'#cce0d0',BORDER);
+
+  // ── CENTRAL AMERICA ────────────────────────────────────────────────────────
+  poly([[-90,18],[-83,16],[-80,8],[-76,8],[-78,10],[-82,12],[-85,14],[-90,16]],LAND,BORDER);
+
+  // ── SOUTH AMERICA ──────────────────────────────────────────────────────────
+  poly([[-80,12],[-62,12],[-50,5],[-35,-5],[-35,-10],[-40,-15],[-42,-22],
+        [-44,-23],[-48,-28],[-52,-33],[-58,-38],[-63,-42],[-65,-46],
+        [-66,-55],[-68,-55],[-72,-50],[-74,-44],[-72,-38],[-68,-30],
+        [-70,-18],[-76,-10],[-78,0],[-80,5]],LAND,BORDER);
+
+  // ── EUROPE ─────────────────────────────────────────────────────────────────
+  poly([[0,50],[2,51],[8,54],[10,58],[5,62],[5,70],[15,70],[28,72],[30,70],
+        [28,65],[22,60],[25,55],[20,54],[18,50],[14,46],[10,44],[6,44],
+        [2,46],[0,50]],LAND2,BORDER);
+  // Iberian
+  poly([[-10,44],[-8,44],[0,44],[3,42],[3,38],[-2,36],[-6,36],[-9,38],[-10,42]],LAND2,BORDER);
+  // Scandinavia
+  poly([[5,58],[10,58],[28,72],[30,70],[28,65],[22,60],[16,56],[10,56],[6,58]],LAND2,BORDER);
+  // UK
+  poly([[-6,50],[-2,50],[2,51],[0,58],[-6,58],[-8,54],[-6,50]],LAND2,BORDER);
+  // Italy
+  poly([[8,44],[12,44],[16,42],[18,40],[16,38],[14,37],[12,38],[10,44]],LAND2,BORDER);
+
+  // ── AFRICA ─────────────────────────────────────────────────────────────────
+  poly([[-18,16],[0,16],[10,24],[20,30],[32,30],[36,22],[42,12],[44,10],
+        [40,5],[34,-4],[32,-10],[30,-18],[28,-26],[26,-34],[20,-36],[16,-30],
+        [12,-18],[8,-2],[2,4],[-2,5],[-8,5],[-16,10],[-18,16]],LAND,BORDER);
+  // Sahara desert tones
+  poly([[0,16],[10,24],[20,30],[32,30],[36,22],[30,20],[20,24],[10,20],[0,18]],DESERT,BORDER);
+  // Madagascar
+  poly([[44,-12],[50,-14],[50,-22],[44,-26],[44,-18]],LAND,BORDER);
+
+  // ── MIDDLE EAST / ARABIA ───────────────────────────────────────────────────
+  poly([[36,22],[42,12],[44,10],[56,22],[60,22],[56,14],[50,12],[44,12],
+        [38,18],[36,22]],DESERT,BORDER);
+  // Turkey / Anatolia
+  poly([[26,42],[36,42],[42,38],[36,36],[30,36],[26,38]],LAND2,BORDER);
+
+  // ── CENTRAL ASIA ───────────────────────────────────────────────────────────
+  poly([[50,38],[60,44],[70,44],[80,44],[80,38],[70,38],[60,36],[50,36]],LAND2,BORDER);
+
+  // ── RUSSIA / SIBERIA ───────────────────────────────────────────────────────
+  poly([[28,72],[50,72],[80,74],[100,74],[120,74],[140,72],[160,66],[168,66],
+        [170,62],[165,58],[160,54],[150,48],[140,46],[130,44],[120,44],
+        [110,48],[100,50],[90,52],[80,54],[70,56],[60,56],[50,60],[42,58],
+        [36,58],[30,60],[26,60],[26,66],[28,72]],LAND2,BORDER);
+  // Kazakhstan desert
+  poly([[50,38],[60,44],[80,44],[80,50],[70,50],[60,48],[50,44]],DESERT,BORDER);
+
+  // ── SOUTH ASIA ─────────────────────────────────────────────────────────────
+  // India
+  poly([[66,24],[80,28],[88,26],[80,22],[76,16],[78,10],[80,8],[76,8],
+        [72,20],[66,24]],LAND,BORDER);
+  // Sri Lanka
+  poly([[80,10],[82,10],[82,8],[80,8]],LAND,BORDER);
+
+  // ── EAST ASIA ──────────────────────────────────────────────────────────────
+  // China main
+  poly([[80,44],[88,28],[100,22],[110,20],[120,22],[122,32],[122,38],
+        [130,44],[120,44],[110,40],[100,40],[90,42],[80,44]],LAND2,BORDER);
+  // Korean peninsula
+  poly([[126,38],[130,38],[130,34],[126,34]],LAND2,BORDER);
+  // Japan main islands
+  poly([[130,32],[132,34],[136,36],[140,38],[142,40],[140,44],[134,44],
+        [130,34]],LAND2,BORDER);
+  // Honshu extra
+  poly([[136,34],[140,36],[138,38],[134,36]],LAND2,BORDER);
+
+  // ── SE ASIA ────────────────────────────────────────────────────────────────
+  poly([[100,22],[104,20],[108,16],[106,10],[100,2],[98,4],[98,14],[100,18]],LAND,BORDER);
+  // Malay peninsula
+  poly([[100,6],[104,2],[104,-2],[102,-4],[100,0],[100,4]],LAND,BORDER);
+  // Sumatra
+  poly([[96,4],[104,2],[106,-4],[100,-6],[96,0]],LAND,BORDER);
+  // Borneo
+  poly([[108,4],[118,4],[118,-4],[108,-4]],LAND,BORDER);
+  // Java
+  poly([[106,-6],[112,-6],[114,-8],[108,-8]],LAND,BORDER);
+  // Philippines
+  poly([[118,16],[122,18],[122,12],[118,10],[116,14]],LAND,BORDER);
+
+  // ── AUSTRALIA ──────────────────────────────────────────────────────────────
+  poly([[114,-22],[124,-16],[130,-12],[136,-12],[138,-16],[138,-26],[132,-32],
+        [126,-34],[118,-32],[114,-26]],LAND,BORDER);
+  // Centre desert
+  poly([[120,-22],[132,-22],[132,-28],[120,-28]],DESERT,BORDER);
+  // New Zealand
+  poly([[166,-34],[172,-34],[174,-40],[170,-44],[166,-42]],'#1a4a1e',BORDER);
+  poly([[172,-36],[174,-36],[178,-40],[174,-44],[170,-44]],'#1a4a1e',BORDER);
+
+  // ── ANTARCTICA ─────────────────────────────────────────────────────────────
+  ctx.fillStyle='#d0e8d8';
+  ctx.fillRect(0,H*0.88,W,H*0.12);
+
+  // ── ARCTIC / NORTH ICE CAP ─────────────────────────────────────────────────
+  ctx.fillStyle='#cce4d0';
+  ctx.fillRect(0,0,W,H*0.05);
+
+  // ── GRATICULE (subtle grid) ────────────────────────────────────────────────
+  ctx.strokeStyle='rgba(0,200,255,0.05)'; ctx.lineWidth=0.5;
+  for(let lon=-180;lon<=180;lon+=30){
+    const [x]=px(lon,0); ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+  }
+  for(let lat=-90;lat<=90;lat+=30){
+    const [,y]=px(0,lat); ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+  }
+
+  return new THREE.CanvasTexture(cv);
+}
+
+// ── Three.js scene ──────────────────────────────────────────────────────────
+const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setClearColor(0x020408,1);
 const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(45,W/H,0.1,100);
-camera.position.set(0,0,3.2);
+const camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,100);
+camera.position.z=3.0;
 
 window.addEventListener('resize',()=>{
   renderer.setSize(window.innerWidth,window.innerHeight);
@@ -1140,194 +1290,116 @@ window.addEventListener('resize',()=>{
 });
 
 // Stars
-const starGeo=new THREE.BufferGeometry();
-const starPos=new Float32Array(3000);
-for(let i=0;i<3000;i+=3){
-  const th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1),r=15+Math.random()*5;
-  starPos[i]=r*Math.sin(ph)*Math.cos(th);
-  starPos[i+1]=r*Math.cos(ph);
-  starPos[i+2]=r*Math.sin(ph)*Math.sin(th);
+const sg=new THREE.BufferGeometry();
+const sp=new Float32Array(4500);
+for(let i=0;i<4500;i+=3){
+  const t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1),r=18+Math.random()*6;
+  sp[i]=r*Math.sin(p)*Math.cos(t); sp[i+1]=r*Math.cos(p); sp[i+2]=r*Math.sin(p)*Math.sin(t);
 }
-starGeo.setAttribute('position',new THREE.BufferAttribute(starPos,3));
-const starMat=new THREE.PointsMaterial({color:0xffffff,size:0.04,sizeAttenuation:true,transparent:true,opacity:0.7});
-scene.add(new THREE.Points(starGeo,starMat));
+sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:0.035,transparent:true,opacity:0.75})));
 
-// Globe — procedural shader material
-const globeGeo=new THREE.SphereGeometry(1,96,64);
-const globeMat=new THREE.ShaderMaterial({
-  uniforms:{uTime:{value:0},uSunDir:{value:new THREE.Vector3(-0.6,0.5,0.7).normalize()}},
-  vertexShader:`
-    varying vec3 vNormal;
-    varying vec2 vUV;
-    varying vec3 vPos;
-    void main(){
-      vNormal=normalize(normalMatrix*normal);
-      vUV=uv;
-      vPos=(modelViewMatrix*vec4(position,1.0)).xyz;
-      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);
-    }`,
-  fragmentShader:`
-    uniform float uTime;
-    uniform vec3 uSunDir;
-    varying vec3 vNormal;
-    varying vec2 vUV;
-    varying vec3 vPos;
-    float rand(vec2 c){return fract(sin(dot(c,vec2(12.9898,78.233)))*43758.5453);}
-    float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
-      return mix(mix(rand(i),rand(i+vec2(1,0)),f.x),mix(rand(i+vec2(0,1)),rand(i+vec2(1,1)),f.x),f.y);}
-    float fbm(vec2 p){return noise(p)*.5+noise(p*2.1)*.25+noise(p*4.3)*.125+noise(p*8.7)*.0625;}
-
-    // Three.js SphereGeometry UVs: u=0..1 west-to-east, v=0..1 south-to-north
-    // Convert to lon (-PI..PI) and lat (-PI/2..PI/2)
-    float isLand(vec2 uv){
-      // lon: 0=left(~180W) to 1=right(~180E); lat: 0=south, 1=north
-      float lon = uv.x;   // 0..1
-      float lat = uv.y;   // 0=south pole, 1=north pole, 0.5=equator
-      float l = 0.0;
-
-      // North America (lon 0.05-0.28, lat 0.35-0.80)
-      l=max(l, smoothstep(0.14,0.04,abs(lon-0.155))*smoothstep(0.22,0.08,abs(lat-0.60)));
-      // Central America
-      l=max(l, smoothstep(0.06,0.02,abs(lon-0.185))*smoothstep(0.08,0.02,abs(lat-0.44)));
-      // Greenland
-      l=max(l, smoothstep(0.07,0.02,abs(lon-0.275))*smoothstep(0.08,0.02,abs(lat-0.80)));
-      // South America (lon 0.14-0.30, lat 0.10-0.47)
-      l=max(l, smoothstep(0.09,0.03,abs(lon-0.215))*smoothstep(0.19,0.06,abs(lat-0.30)));
-      // Europe (lon 0.44-0.57, lat 0.55-0.78)
-      l=max(l, smoothstep(0.08,0.03,abs(lon-0.500))*smoothstep(0.13,0.04,abs(lat-0.67)));
-      // Scandinavia bump
-      l=max(l, smoothstep(0.04,0.01,abs(lon-0.505))*smoothstep(0.05,0.01,abs(lat-0.76)));
-      // Africa (lon 0.44-0.60, lat 0.20-0.62)
-      l=max(l, smoothstep(0.10,0.04,abs(lon-0.515))*smoothstep(0.22,0.08,abs(lat-0.42)));
-      // Middle East / Arabia
-      l=max(l, smoothstep(0.07,0.02,abs(lon-0.575))*smoothstep(0.08,0.02,abs(lat-0.57)));
-      // Asia main (lon 0.50-0.88, lat 0.52-0.85)
-      l=max(l, smoothstep(0.22,0.08,abs(lon-0.695))*smoothstep(0.19,0.06,abs(lat-0.67)));
-      // India subcontinent
-      l=max(l, smoothstep(0.06,0.02,abs(lon-0.640))*smoothstep(0.09,0.02,abs(lat-0.50)));
-      // SE Asia / Indochina
-      l=max(l, smoothstep(0.07,0.02,abs(lon-0.730))*smoothstep(0.06,0.02,abs(lat-0.54)));
-      // Japan
-      l=max(l, smoothstep(0.03,0.01,abs(lon-0.833))*smoothstep(0.05,0.01,abs(lat-0.67)));
-      // Korea
-      l=max(l, smoothstep(0.02,0.005,abs(lon-0.815))*smoothstep(0.04,0.01,abs(lat-0.65)));
-      // Australia (lon 0.76-0.93, lat 0.20-0.42)
-      l=max(l, smoothstep(0.10,0.03,abs(lon-0.845))*smoothstep(0.12,0.04,abs(lat-0.33)));
-      // New Zealand
-      l=max(l, smoothstep(0.03,0.01,abs(lon-0.920))*smoothstep(0.04,0.01,abs(lat-0.28)));
-      // Antarctica (lat < 0.06)
-      l=max(l, smoothstep(0.08,0.0,lat-0.0)*0.9);
-
-      return clamp(l*2.0, 0.0, 1.0);
-    }
-
-    void main(){
-      float land=isLand(vUV);
-      float tex=fbm(vUV*6.);
-      vec3 ocean=mix(vec3(.01,.06,.20),vec3(.04,.20,.42),fbm(vUV*3.)*.5);
-      ocean+=vec3(0.,.04,.10)*fbm(vUV*12.+vec2(uTime*.05,0.));
-      vec3 lnd=mix(vec3(.07,.30,.11),vec3(.15,.44,.17),tex);
-      // Desert tones in tropics
-      float tropics=smoothstep(0.08,0.0,abs(vUV.y-0.42))*land;
-      lnd=mix(lnd,vec3(.52,.40,.16),tropics*.4);
-      // Snow poles — v<0.08 south, v>0.92 north
-      float polar=smoothstep(.88,1.0,vUV.y)+smoothstep(.12,0.0,vUV.y);
-      lnd=mix(lnd,vec3(.90,.93,.97),clamp(polar,0.,1.));
-      ocean=mix(ocean,vec3(.82,.88,.95),clamp(polar,0.,1.));
-      vec3 surf=mix(ocean,lnd,land);
-      // Clouds
-      float cloud=smoothstep(.53,.70,
-        fbm(vUV*4.5+vec2(uTime*.012,0.))*.6+
-        fbm(vUV*8.5-vec2(uTime*.007,uTime*.003))*.4);
-      cloud*=(1.-clamp(polar*1.2,0.,1.)*.7);
-      surf=mix(surf,vec3(.90,.94,1.),cloud*.88);
-      // Lighting
-      vec3 N=normalize(vNormal);
-      float diff=max(0.,dot(N,uSunDir))*.8+.2;
-      vec3 view=normalize(-vPos);
-      float spec=pow(max(0.,dot(reflect(-uSunDir,N),view)),48.)*(1.-land)*(1.-cloud)*.6;
-      vec3 col=surf*diff+vec3(.4,.7,1.)*spec;
-      // Atmosphere rim
-      float rim=pow(1.-max(0.,dot(N,view)),4.)*(.5+.5*max(0.,dot(N,uSunDir)));
-      col+=vec3(.05,.35,.85)*rim*.8;
-      // Night city lights
-      float night=1.-smoothstep(0.,.3,max(0.,dot(N,uSunDir)));
-      col+=vec3(1.,.6,.15)*land*(fbm(vUV*22.)*.7+.3)*night*.22;
-      gl_FragColor=vec4(col,1.);
-    }`,
+// Globe with canvas texture
+const earthTex=makeEarthTexture();
+const globeGeo=new THREE.SphereGeometry(1,64,48);
+const globeMat=new THREE.MeshPhongMaterial({
+  map:earthTex,
+  specular:new THREE.Color(0x112244),
+  shininess:18,
+  bumpScale:0.02,
 });
 const globe=new THREE.Mesh(globeGeo,globeMat);
 scene.add(globe);
 
-// Atmosphere
+// Atmosphere glow (additive shell)
+const atmGeo=new THREE.SphereGeometry(1.06,64,48);
 const atmMat=new THREE.ShaderMaterial({
-  uniforms:{uSunDir:{value:new THREE.Vector3(-0.6,0.5,0.7).normalize()}},
+  uniforms:{},
   vertexShader:`varying vec3 vN;varying vec3 vP;
-    void main(){vN=normalize(normalMatrix*normal);vP=(modelViewMatrix*vec4(position,1.)).xyz;
+    void main(){vN=normalize(normalMatrix*normal);
+    vP=(modelViewMatrix*vec4(position,1.)).xyz;
     gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`uniform vec3 uSunDir;varying vec3 vN;varying vec3 vP;
-    void main(){vec3 N=normalize(vN);float rim=pow(1.-max(0.,dot(N,normalize(-vP))),4.5);
-    float sun=max(0.,dot(N,uSunDir))*.5+.5;
-    vec3 c=mix(vec3(.05,.28,.9),vec3(.3,.6,1.),sun);gl_FragColor=vec4(c,rim*.5);}`,
-  side:THREE.BackSide,transparent:true,depthWrite:false
+  fragmentShader:`varying vec3 vN;varying vec3 vP;
+    void main(){float r=pow(1.-max(0.,dot(normalize(vN),normalize(-vP))),4.5);
+    gl_FragColor=vec4(.08,.35,.95,r*.6);}`,
+  side:THREE.BackSide,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
 });
-const atm=new THREE.Mesh(new THREE.SphereGeometry(1.08,64,48),atmMat);
-scene.add(atm);
+scene.add(new THREE.Mesh(atmGeo,atmMat));
 
-// Hub markers + pulse rings
-function hubPos(lat,lon,r){
-  const phi=(90-lat)*Math.PI/180,th=(lon+180)*Math.PI/180;
+// Lighting
+const sun=new THREE.DirectionalLight(0xfff5e8,1.1);
+sun.position.set(-2,1,1.5);
+scene.add(sun);
+scene.add(new THREE.AmbientLight(0x112244,0.6));
+
+// Hub markers
+function latLonToVec3(lat,lon,r){
+  const phi=(90-lat)*Math.PI/180, th=(lon+180)*Math.PI/180;
   return new THREE.Vector3(-Math.sin(phi)*Math.cos(th)*r,Math.cos(phi)*r,Math.sin(phi)*Math.sin(th)*r);
 }
-function hubColor(score){
-  const t=(score-6.5)/3.0;
-  return new THREE.Color(0.05+t*.17, 0.96-t*.24, 1.0-t*.38);
+function scoreColor(s){
+  const t=(s-6.5)/3.5;
+  return new THREE.Color().setHSL(0.5-t*0.18,1.0,0.5+t*0.1);
 }
 
-const markers=[], rings=[];
+const markers=[];
+const ringMeshes=[];
 HUBS.forEach((h,i)=>{
-  const pos=hubPos(h.lat,h.lon,1.015);
-  // Dot
+  const pos=latLonToVec3(h.lat,h.lon,1.012);
+  const col=scoreColor(h.score);
+  // Dot marker
   const dot=new THREE.Mesh(
-    new THREE.SphereGeometry(0.018,8,8),
-    new THREE.MeshBasicMaterial({color:hubColor(h.score)})
+    new THREE.SphereGeometry(0.016,8,8),
+    new THREE.MeshBasicMaterial({color:col})
   );
   dot.position.copy(pos);
-  dot.userData={hub:h,pos:pos.clone()};
+  dot.userData={hub:h, basePos:pos.clone()};
   scene.add(dot);
   markers.push(dot);
-  // Ring
-  const ringGeo=new THREE.RingGeometry(0.025,0.032,32);
-  const ringMat=new THREE.MeshBasicMaterial({color:hubColor(h.score),transparent:true,opacity:0.8,side:THREE.DoubleSide,depthWrite:false});
-  const ring=new THREE.Mesh(ringGeo,ringMat);
+  // Halo ring
+  const ring=new THREE.Mesh(
+    new THREE.RingGeometry(0.022,0.030,32),
+    new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.7,
+      side:THREE.DoubleSide,depthWrite:false})
+  );
   ring.position.copy(pos);
   ring.lookAt(pos.clone().multiplyScalar(2));
-  ring.userData={phase:i*0.35};
+  ring.userData={basePos:pos.clone(),phase:i*0.4};
   scene.add(ring);
-  rings.push(ring);
+  ringMeshes.push(ring);
 });
 
-// Mouse / drag
-let rotX=0.18,rotY=0.3,zoom=3.2,isDrag=false,px=0,py=0,vx=0,vy=0,autoRot=true,autoT=null;
+// Interaction
+let rotX=0.18,rotY=0.0,isDrag=false,px=0,py=0,vx=0,vy=0,autoRot=true,autoT=null;
 const cvs=document.getElementById('c');
-cvs.addEventListener('mousedown',e=>{isDrag=true;px=e.clientX;py=e.clientY;autoRot=false;clearTimeout(autoT);});
+cvs.addEventListener('mousedown',e=>{isDrag=true;px=e.clientX;py=e.clientY;
+  autoRot=false;clearTimeout(autoT);e.preventDefault();});
 window.addEventListener('mousemove',e=>{
-  if(isDrag){vy=(e.clientX-px)*.006;vx=(e.clientY-py)*.006;rotY+=vy;rotX+=vx;rotX=Math.max(-1.3,Math.min(1.3,rotX));px=e.clientX;py=e.clientY;}
-  checkHover(e);
+  if(isDrag){
+    vy=(e.clientX-px)*.005; vx=(e.clientY-py)*.005;
+    rotY+=vy; rotX+=vx;
+    rotX=Math.max(-1.4,Math.min(1.4,rotX));
+    px=e.clientX; py=e.clientY;
+  }
+  doHover(e);
 });
-window.addEventListener('mouseup',()=>{isDrag=false;autoT=setTimeout(()=>autoRot=true,3000);});
-cvs.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(2.0,Math.min(6.0,zoom+e.deltaY*.004));},{passive:false});
+window.addEventListener('mouseup',()=>{isDrag=false;autoT=setTimeout(()=>autoRot=true,2500);});
+let zoom=3.0;
+cvs.addEventListener('wheel',e=>{
+  e.preventDefault();
+  zoom=Math.max(1.8,Math.min(6.0,zoom+e.deltaY*.003));
+},{passive:false});
 
-// Tooltip
-const tt=document.getElementById('tt');
+// Raycaster tooltip
 const raycaster=new THREE.Raycaster();
-raycaster.params.Points={threshold:0.05};
 const mouse=new THREE.Vector2();
-function checkHover(e){
+const tt=document.getElementById('tt');
+function doHover(e){
   const rect=cvs.getBoundingClientRect();
   mouse.x=(e.clientX-rect.left)/rect.width*2-1;
   mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
   raycaster.setFromCamera(mouse,camera);
+  raycaster.params.Mesh={};
   const hits=raycaster.intersectObjects(markers);
   if(hits.length){
     const h=hits[0].object.userData.hub;
@@ -1339,42 +1411,37 @@ function checkHover(e){
     tt.style.display='block';
     tt.style.left=(e.clientX+16)+'px';
     tt.style.top=(e.clientY-10)+'px';
-  } else {
-    tt.style.display='none';
-  }
+  } else { tt.style.display='none'; }
 }
 cvs.addEventListener('mouseleave',()=>tt.style.display='none');
 
-// Render loop
+// Animation loop
 const clock=new THREE.Clock();
+const euler=new THREE.Euler();
 function animate(){
   requestAnimationFrame(animate);
   const t=clock.getElapsedTime();
-  if(autoRot) rotY+=0.0015;
+  if(autoRot) rotY+=0.0018;
   if(!isDrag){vx*=0.88;vy*=0.88;}
-  // Apply rotation + zoom
-  globe.rotation.x=rotX; globe.rotation.y=rotY;
-  atm.rotation.x=rotX;   atm.rotation.y=rotY;
+  globe.rotation.set(rotX,rotY,0);
+  // Markers follow globe rotation
+  euler.set(rotX,rotY,0);
+  const quat=new THREE.Quaternion().setFromEuler(euler);
   markers.forEach((m,i)=>{
-    const orig=m.userData.pos.clone();
-    // Rotate to match globe
-    orig.applyEuler(new THREE.Euler(rotX,rotY,0,'XYZ'));
-    m.position.copy(orig);
-    m.scale.setScalar(0.9+Math.sin(t*2+i*.6)*.1);
+    const p=m.userData.basePos.clone().applyQuaternion(quat);
+    m.position.copy(p);
+    m.scale.setScalar(0.85+Math.sin(t*2.5+i*.7)*.15);
   });
-  rings.forEach((r,i)=>{
-    const orig=r.userData?r.userData:markers[i].userData;
-    const pos=markers[i].userData.pos.clone();
-    pos.applyEuler(new THREE.Euler(rotX,rotY,0,'XYZ'));
-    r.position.copy(pos);
-    r.lookAt(pos.clone().multiplyScalar(2));
-    const ph=(t*1.8+rings[i].userData.phase)%(Math.PI*2);
-    const sc=1+Math.sin(ph)*1.4;
-    r.scale.setScalar(sc);
-    r.material.opacity=Math.max(0,0.65*(1-sc/2.4));
+  ringMeshes.forEach((r,i)=>{
+    const p=r.userData.basePos.clone().applyQuaternion(quat);
+    r.position.copy(p);
+    r.lookAt(p.clone().multiplyScalar(2));
+    const ph=(t*1.6+r.userData.phase)%(Math.PI*2);
+    const sc=1+Math.sin(ph)*1.5;
+    r.scale.setScalar(Math.max(0.01,sc));
+    r.material.opacity=Math.max(0,0.6*(1-sc/2.5));
   });
   camera.position.z=zoom;
-  globeMat.uniforms.uTime.value=t;
   renderer.render(scene,camera);
 }
 animate();
