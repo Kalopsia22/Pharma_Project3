@@ -830,7 +830,7 @@ with tabs[2]:
         # Table header
         hcols = st.columns([2.5,1.5,1,1,1])
         for hc, ht in zip(hcols, ["Drug / Category","Risk Score","Status","Region","Level"]):
-            hc.markdown(f'<div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
+            st.html(f'<div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
 
         for drug, cat, score, status, region, risk in SHORTAGE_TABLE:
             risk_color = C["danger"] if risk=="HIGH" else C["warning"] if risk=="MEDIUM" else C["success"]
@@ -1007,18 +1007,21 @@ with tabs[5]:
           <div style="font-size:9px;color:#4a6080;font-family:DM Mono,monospace;margin-bottom:16px">PubMed Analysis · arXiv Cross-reference · AI Synthesis</div>
         </div>""")
 
-        ec1, ec2, ec3 = st.columns(3)
-        for col, label, text, color in [
-            (ec1, "SUMMARY", data["summary"], C["accent"]),
-            (ec2, "DRUG MECHANISM", data["mechanism"], C["accent2"]),
-            (ec3, "CLINICAL IMPACT", data["impact"], C["accent3"]),
-        ]:
-            rgb = "0,212,255" if color==C["accent"] else "123,79,255" if color==C["accent2"] else "0,255,157"
-            col.markdown(f"""
-            <div style="padding:14px;background:rgba({rgb},0.04);border-radius:8px;border:1px solid rgba({rgb},0.12);height:100%">
-              <div style="font-size:9px;font-weight:700;letter-spacing:0.15em;color:{color};font-family:DM Mono,monospace;margin-bottom:8px">{label}</div>
-              <div style="font-size:12px;color:#8fa4c2;font-family:DM Mono,monospace;line-height:1.6">{text}</div>
-            </div>""")
+        st.html(f"""
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px">
+          <div style="padding:14px;background:rgba(0,212,255,0.04);border-radius:8px;border:1px solid rgba(0,212,255,0.12)">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.15em;color:#00d4ff;font-family:DM Mono,monospace;margin-bottom:8px">SUMMARY</div>
+            <div style="font-size:12px;color:#8fa4c2;font-family:DM Mono,monospace;line-height:1.6">{data['summary']}</div>
+          </div>
+          <div style="padding:14px;background:rgba(123,79,255,0.04);border-radius:8px;border:1px solid rgba(123,79,255,0.12)">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.15em;color:#7b4fff;font-family:DM Mono,monospace;margin-bottom:8px">DRUG MECHANISM</div>
+            <div style="font-size:12px;color:#8fa4c2;font-family:DM Mono,monospace;line-height:1.6">{data['mechanism']}</div>
+          </div>
+          <div style="padding:14px;background:rgba(0,255,157,0.04);border-radius:8px;border:1px solid rgba(0,255,157,0.12)">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.15em;color:#00ff9d;font-family:DM Mono,monospace;margin-bottom:8px">CLINICAL IMPACT</div>
+            <div style="font-size:12px;color:#8fa4c2;font-family:DM Mono,monospace;line-height:1.6">{data['impact']}</div>
+          </div>
+        </div>""")
 
     st.html("<div style='height:16px'></div>")
     col1, col2 = st.columns([1,1])
@@ -1152,7 +1155,7 @@ with tabs[7]:
     ptitle("Top Disease–Drug Connections")
     hcols = st.columns([2,2,2,3,1.5])
     for hc, ht in zip(hcols, ["Disease","Target Protein","Drug","Mechanism","Confidence"]):
-        hc.markdown(f'<div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
+        st.html(f'<div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
 
     for dis, prot, drug, mech, conf in [
         ("Alzheimer's","BACE1","Lecanemab","β-Secretase Inhibition",92),
@@ -1164,11 +1167,11 @@ with tabs[7]:
         ("Autoimmune","JAK-STAT","Baricitinib","JAK1/2 Inhibition",89),
     ]:
         rc = st.columns([2,2,2,3,1.5])
-        rc[0].markdown(f'<div style="font-size:11px;color:#ff3b5c;font-family:DM Mono,monospace;padding:4px 0">{dis}</div>')
-        rc[1].markdown(f'<div style="font-size:11px;color:#ffd700;font-family:DM Mono,monospace;padding:4px 0">{prot}</div>')
-        rc[2].markdown(f'<div style="font-size:11px;color:#00d4ff;font-family:DM Mono,monospace;padding:4px 0">{drug}</div>')
-        rc[3].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;padding:4px 0">{mech}</div>')
-        rc[4].markdown(f'<div style="display:flex;align-items:center;gap:4px;padding:4px 0"><div style="flex:1;height:3px;background:rgba(255,255,255,0.06);border-radius:2px"><div style="height:100%;width:{conf}%;background:#00ff9d;border-radius:2px"></div></div><span style="font-size:9px;color:#00ff9d;font-family:DM Mono,monospace">{conf}%</span></div>')
+        st.html(f'<div style="font-size:11px;color:#ff3b5c;font-family:DM Mono,monospace;padding:4px 0">{dis}</div>')
+        st.html(f'<div style="font-size:11px;color:#ffd700;font-family:DM Mono,monospace;padding:4px 0">{prot}</div>')
+        st.html(f'<div style="font-size:11px;color:#00d4ff;font-family:DM Mono,monospace;padding:4px 0">{drug}</div>')
+        st.html(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;padding:4px 0">{mech}</div>')
+        st.html(f'<div style="display:flex;align-items:center;gap:4px;padding:4px 0"><div style="flex:1;height:3px;background:rgba(255,255,255,0.06);border-radius:2px"><div style="height:100%;width:{conf}%;background:#00ff9d;border-radius:2px"></div></div><span style="font-size:9px;color:#00ff9d;font-family:DM Mono,monospace">{conf}%</span></div>')
 
 # ══════════════════════════════════════════════
 # TAB 9 — RISK INDEX
@@ -1192,13 +1195,13 @@ with tabs[8]:
         ptitle("Pharma Risk Scorecard")
         hcols = st.columns([2.5,0.8,0.8,1,1,1,1])
         for hc, ht in zip(hcols, ["Country","Score","Grade","Shortage","Reg. Delay","Supply","Trials"]):
-            hc.markdown(f'<div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
+            st.html(f'<div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
         for r in COUNTRY_RISK:
             risk_color = C["danger"] if r[1]>70 else C["warning"] if r[1]>45 else C["success"]
             rc = st.columns([2.5,0.8,0.8,1,1,1,1])
-            rc[0].markdown(f'<div style="font-size:12px;color:#e2eaf5;font-weight:600;padding:3px 0">{r[0]}</div>')
-            rc[1].markdown(f'<div style="font-size:14px;font-weight:700;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[1]}</div>')
-            rc[2].markdown(f'<div style="font-size:12px;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[2]}</div>')
+            st.html(f'<div style="font-size:12px;color:#e2eaf5;font-weight:600;padding:3px 0">{r[0]}</div>')
+            st.html(f'<div style="font-size:14px;font-weight:700;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[1]}</div>')
+            st.html(f'<div style="font-size:12px;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[2]}</div>')
             for i, val in enumerate([r[3],r[4],r[5],r[6]]):
                 rc[3+i].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;padding:3px 0">{val}</div>')
 
@@ -1256,7 +1259,7 @@ with tabs[9]:
          "AMR projected to cause 10M deaths/year by 2050. Antibiotic pipeline has only 43 drugs — mostly modifications of existing classes. Novel mechanisms urgently needed: phage therapies, bacteriocins.",
          "GAP SCORE: 88/100", C["accent4"], "255,107,53"),
     ]:
-        col.markdown(f"""
+        st.html(f"""
         <div style="padding:16px;background:rgba({rgb},0.06);border-radius:10px;border:1px solid rgba({rgb},0.15);height:100%">
           <div style="font-size:24px;margin-bottom:8px">{icon}</div>
           <div style="font-size:13px;font-weight:700;color:{color};margin-bottom:6px;font-family:Syne,sans-serif">{title}</div>
