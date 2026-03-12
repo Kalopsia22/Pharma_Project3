@@ -1066,7 +1066,7 @@ with tabs[4]:
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:#020408;overflow:hidden;}
   .globe-wrap {
-    width:100vw; height:560px; position:relative; overflow:hidden;
+    width:100%; height:500px; position:relative; overflow:hidden;
     border:1px solid rgba(13,244,255,0.12); background:#020408;
   }
   #globe-canvas { width:100%; height:100%; display:block; cursor:grab; touch-action:none; }
@@ -1134,7 +1134,14 @@ const HUBS=[
 ];
 const canvas=document.getElementById('globe-canvas');
 const wrap=canvas.parentElement;
-function resize(){canvas.width=wrap.clientWidth*devicePixelRatio;canvas.height=wrap.clientHeight*devicePixelRatio;canvas.style.width=wrap.clientWidth+'px';canvas.style.height=wrap.clientHeight+'px';}
+function resize(){
+  const w=wrap.clientWidth||window.innerWidth;
+  const h=wrap.clientHeight||500;
+  canvas.width=w*devicePixelRatio;
+  canvas.height=h*devicePixelRatio;
+  canvas.style.width=w+'px';
+  canvas.style.height=h+'px';
+}
 resize();window.addEventListener('resize',()=>{resize();});
 const gl=canvas.getContext('webgl',{antialias:true,alpha:false})||canvas.getContext('experimental-webgl',{antialias:true,alpha:false});
 if(!gl){canvas.parentElement.innerHTML='<p style="color:#f43f5e;padding:20px">WebGL not supported</p>';return;}
@@ -1176,7 +1183,7 @@ function translate(tx,ty,tz,out){identity(out);out[12]=tx;out[13]=ty;out[14]=tz;
 function rotY(a,out){identity(out);const c=Math.cos(a),s=Math.sin(a);out[0]=c;out[2]=s;out[8]=-s;out[10]=c;return out;}
 function rotX(a,out){identity(out);const c=Math.cos(a),s=Math.sin(a);out[5]=c;out[6]=-s;out[9]=s;out[10]=c;return out;}
 function normalMatrix3(m4,out3){out3[0]=m4[0];out3[1]=m4[4];out3[2]=m4[8];out3[3]=m4[1];out3[4]=m4[5];out3[5]=m4[9];out3[6]=m4[2];out3[7]=m4[6];out3[8]=m4[10];return out3;}
-let rotY_val=0.3,rotX_val=0.18,zoom=2.8,isDragging=false,prevX=0,prevY=0,velX=0,velY=0,autoRot=true,autoTimer=null,time=0;
+let rotY_val=0.3,rotX_val=0.18,zoom=3.8,isDragging=false,prevX=0,prevY=0,velX=0,velY=0,autoRot=true,autoTimer=null,time=0;
 function startDrag(x,y){isDragging=true;prevX=x;prevY=y;autoRot=false;clearTimeout(autoTimer);}
 function doDrag(x,y){if(!isDragging)return;velY=(x-prevX)*0.007;velX=(y-prevY)*0.007;rotY_val+=velY;rotX_val+=velX;rotX_val=Math.max(-1.3,Math.min(1.3,rotX_val));prevX=x;prevY=y;}
 function endDrag(){isDragging=false;autoTimer=setTimeout(()=>autoRot=true,3000);}
@@ -1186,7 +1193,7 @@ window.addEventListener('mouseup',endDrag);
 canvas.addEventListener('touchstart',e=>{e.preventDefault();startDrag(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
 canvas.addEventListener('touchmove',e=>{e.preventDefault();doDrag(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
 canvas.addEventListener('touchend',endDrag);
-canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(1.7,Math.min(5.5,zoom+e.deltaY*0.004));},{passive:false});
+canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(2.8,Math.min(6.5,zoom+e.deltaY*0.004));},{passive:false});
 const tooltip=document.getElementById('tt');
 canvas.addEventListener('mousemove',e=>{
   const rect=canvas.getBoundingClientRect();
@@ -1269,7 +1276,7 @@ requestAnimationFrame(render);
 })();
 </script>
 </body></html>
-""", height=580, scrolling=False)
+""", height=520, scrolling=False)
 
     col1, col2 = st.columns([1, 1])
     with col1:
