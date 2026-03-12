@@ -26,7 +26,7 @@ st.set_page_config(
 # ─────────────────────────────────────────────
 # CUSTOM CSS
 # ─────────────────────────────────────────────
-st.markdown("""
+st.html("""
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   /* Global */
@@ -198,7 +198,7 @@ st.markdown("""
   /* Divider */
   hr { border-color: rgba(0,212,255,0.1) !important; }
 </style>
-""", unsafe_allow_html=True)
+""")
 
 # ─────────────────────────────────────────────
 # COLOUR PALETTE
@@ -365,17 +365,17 @@ def stat_cards(items):
             ch_color = C["success"] if up else C["danger"]
             ch_bg = "rgba(0,230,118,.12)" if up else "rgba(255,59,92,.12)"
             badge = f'<span style="font-size:9px;font-family:DM Mono,monospace;color:{ch_color};background:{ch_bg};padding:2px 7px;border-radius:4px;display:inline-block;margin-top:6px">{arrow} {change}</span>' if change else ""
-            st.markdown(f"""
+            st.html(f"""
             <div class="stat-card">
               <div class="stat-label">{label}</div>
               <div class="stat-value" style="color:{color}">{value}</div>
               <div class="stat-sub">{sub}</div>
               {badge}
-            </div>""", unsafe_allow_html=True)
+            </div>""")
 
 def section_hdr(icon, title, sub, badge=None):
     b = f'<span class="ai-badge">{badge}</span>' if badge else ""
-    st.markdown(f"""
+    st.html(f"""
     <div class="section-header">
       <span class="section-icon">{icon}</span>
       <div>
@@ -383,10 +383,10 @@ def section_hdr(icon, title, sub, badge=None):
         <div class="section-sub">{sub}</div>
       </div>
       {b}
-    </div>""", unsafe_allow_html=True)
+    </div>""")
 
 def ptitle(text):
-    st.markdown(f'<div class="panel-title">{text}</div>', unsafe_allow_html=True)
+    st.html(f'<div class="panel-title">{text}</div>')
 
 # ─────────────────────────────────────────────
 # CHART BUILDERS
@@ -686,7 +686,7 @@ def chart_gap_bar():
 # HEADER
 # ─────────────────────────────────────────────
 now_str = datetime.utcnow().strftime("%H:%M:%S UTC")
-st.markdown(f"""
+st.html(f"""
 <div class="gdim-header">
   <div style="display:flex;align-items:center;gap:14px">
     <span style="font-size:28px;color:#00d4ff;text-shadow:0 0 15px #00d4ff;font-weight:800">⊕</span>
@@ -700,9 +700,9 @@ st.markdown(f"""
     LIVE &nbsp;·&nbsp; FDA · WHO · PubMed · ClinicalTrials.gov &nbsp;·&nbsp; {now_str}
   </div>
 </div>
-""", unsafe_allow_html=True)
+""")
 
-st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+st.html("<div style='height:8px'></div>")
 
 # ─────────────────────────────────────────────
 # TABS
@@ -736,7 +736,7 @@ with tabs[0]:
         ("R&D Funding","$892B","Global investment","9.3%",True,C["accent4"]),
     ])
 
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.html("<div style='height:16px'></div>")
 
     col1, col2 = st.columns([2,1])
     with col1:
@@ -773,7 +773,7 @@ with tabs[1]:
         ("Avg. Dev. Savings","$1.4B","Per repurposed drug",None,True,C["accent2"]),
     ])
 
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.html("<div style='height:16px'></div>")
 
     col1, col2 = st.columns([1,1])
     with col1:
@@ -786,7 +786,7 @@ with tabs[1]:
             drug, orig, new_use, conf, basis = r
             bar_w = conf
             color = "#00ff9d" if conf>85 else "#00d4ff" if conf>70 else "#8fa4c2"
-            st.markdown(f"""
+            st.html(f"""
             <div class="repurpose-card">
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
                 <span class="drug-tag">{drug}</span>
@@ -801,7 +801,7 @@ with tabs[1]:
                 <span style="font-size:10px;font-family:DM Mono,monospace;color:{color}">{conf}%</span>
               </div>
               <div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace">{basis}</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
 
 # ══════════════════════════════════════════════
 # TAB 3 — SHORTAGES
@@ -819,7 +819,7 @@ with tabs[2]:
         ("Supply Chain Events","91","Monitored incidents",None,True,C["accent2"]),
     ])
 
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.html("<div style='height:16px'></div>")
 
     ptitle("Drug Shortage Risk Scores — Live 90-Day Trend")
     st.plotly_chart(chart_shortage_ts(), use_container_width=True, config={"displayModeBar":False})
@@ -830,17 +830,17 @@ with tabs[2]:
         # Table header
         hcols = st.columns([2.5,1.5,1,1,1])
         for hc, ht in zip(hcols, ["Drug / Category","Risk Score","Status","Region","Level"]):
-            hc.markdown(f'<div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>', unsafe_allow_html=True)
+            hc.markdown(f'<div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
 
         for drug, cat, score, status, region, risk in SHORTAGE_TABLE:
             risk_color = C["danger"] if risk=="HIGH" else C["warning"] if risk=="MEDIUM" else C["success"]
             risk_rgb = "255,59,92" if risk=="HIGH" else "255,184,0" if risk=="MEDIUM" else "0,230,118"
             rcols = st.columns([2.5,1.5,1,1,1])
-            rcols[0].markdown(f'<div style="font-size:12px;color:#e2eaf5;font-weight:600">{drug}</div><div style="font-size:10px;color:#4a6080;font-family:DM Mono,monospace">{cat}</div>', unsafe_allow_html=True)
-            rcols[1].markdown(f'<div style="display:flex;align-items:center;gap:6px;margin-top:4px"><div style="flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px"><div style="height:100%;width:{score}%;background:{risk_color}"></div></div><span style="font-size:10px;color:{risk_color};font-family:DM Mono,monospace">{score}</span></div>', unsafe_allow_html=True)
-            rcols[2].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;margin-top:4px">{status}</div>', unsafe_allow_html=True)
-            rcols[3].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;margin-top:4px">{region}</div>', unsafe_allow_html=True)
-            rcols[4].markdown(f'<span style="background:rgba({risk_rgb},.15);color:{risk_color};border:1px solid rgba({risk_rgb},.3);padding:3px 8px;border-radius:4px;font-size:9px;font-family:DM Mono,monospace;font-weight:700">● {risk}</span>', unsafe_allow_html=True)
+            rcols[0].markdown(f'<div style="font-size:12px;color:#e2eaf5;font-weight:600">{drug}</div><div style="font-size:10px;color:#4a6080;font-family:DM Mono,monospace">{cat}</div>')
+            rcols[1].markdown(f'<div style="display:flex;align-items:center;gap:6px;margin-top:4px"><div style="flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px"><div style="height:100%;width:{score}%;background:{risk_color}"></div></div><span style="font-size:10px;color:{risk_color};font-family:DM Mono,monospace">{score}</span></div>')
+            rcols[2].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;margin-top:4px">{status}</div>')
+            rcols[3].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;margin-top:4px">{region}</div>')
+            rcols[4].markdown(f'<span style="background:rgba({risk_rgb},.15);color:{risk_color};border:1px solid rgba({risk_rgb},.3);padding:3px 8px;border-radius:4px;font-size:9px;font-family:DM Mono,monospace;font-weight:700">● {risk}</span>')
 
     with col2:
         ptitle("Risk Score Ranking")
@@ -858,7 +858,7 @@ with tabs[3]:
         "Molecular fingerprints · Pharmacokinetic modeling · Real-time interaction prediction",
         "⚡ AI PREDICTION")
 
-    st.markdown('<div class="panel">', unsafe_allow_html=True)
+    st.html('<div class="panel">')
     ptitle("Enter Drugs to Analyze")
     c1, c2, c3 = st.columns([2,2,1])
     with c1:
@@ -867,7 +867,7 @@ with tabs[3]:
         d2 = st.text_input("Drug 2", value="aspirin", placeholder="e.g. aspirin", label_visibility="collapsed")
     with c3:
         analyze = st.button("Analyze Interaction", key="btn_interact")
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.html('</div>')
 
     if analyze or (d1 and d2):
         k1, k2 = d1.lower().strip(), d2.lower().strip()
@@ -881,7 +881,7 @@ with tabs[3]:
         with gc1:
             st.plotly_chart(chart_interaction_gauge(score, level), use_container_width=True, config={"displayModeBar":False})
         with gc2:
-            st.markdown(f"""
+            st.html(f"""
             <div style="padding:16px">
               <div style="font-size:16px;font-weight:700;color:#e2eaf5;margin-bottom:14px;font-family:Syne,sans-serif">
                 {d1.title()} + {d2.title()}
@@ -898,9 +898,9 @@ with tabs[3]:
                 <div style="font-size:9px;color:#4a6080;font-family:DM Mono,monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px">Recommendation</div>
                 <div style="font-size:12px;color:#00ff9d;font-family:DM Mono,monospace;line-height:1.5">Monitor patient closely. Check for signs of adverse effects. Consider dose adjustment or alternative therapy if risk outweighs benefit.</div>
               </div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
 
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.html("<div style='height:16px'></div>")
     col1, col2 = st.columns(2)
     with col1:
         ptitle("Common High-Risk Combinations")
@@ -937,7 +937,7 @@ with tabs[4]:
         ("Emerging Regions","12","New biotech hubs",None,True,C["accent2"]),
         ("Cross-Border Trials","61%","International",None,True,C["accent4"]),
     ])
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.html("<div style='height:16px'></div>")
 
     ptitle("Global Pharmaceutical Innovation Density")
     st.plotly_chart(chart_innovation_map(), use_container_width=True, config={"displayModeBar":False,"scrollZoom":True})
@@ -1001,11 +1001,11 @@ with tabs[5]:
         key = "glp" if ("glp" in q or "alzheimer" in q) else "mrna" if ("mrna" in q or "mrna" in q or "vaccine" in q) else "default"
         data = PAPER_DB[key]
 
-        st.markdown(f"""
+        st.html(f"""
         <div style="background:#112240;border:1px solid rgba(0,212,255,0.12);border-radius:12px;padding:20px;margin-bottom:16px">
           <div style="font-size:15px;font-weight:700;color:#e2eaf5;margin-bottom:4px;font-family:Syne,sans-serif">{data['title']}</div>
           <div style="font-size:9px;color:#4a6080;font-family:DM Mono,monospace;margin-bottom:16px">PubMed Analysis · arXiv Cross-reference · AI Synthesis</div>
-        </div>""", unsafe_allow_html=True)
+        </div>""")
 
         ec1, ec2, ec3 = st.columns(3)
         for col, label, text, color in [
@@ -1018,9 +1018,9 @@ with tabs[5]:
             <div style="padding:14px;background:rgba({rgb},0.04);border-radius:8px;border:1px solid rgba({rgb},0.12);height:100%">
               <div style="font-size:9px;font-weight:700;letter-spacing:0.15em;color:{color};font-family:DM Mono,monospace;margin-bottom:8px">{label}</div>
               <div style="font-size:12px;color:#8fa4c2;font-family:DM Mono,monospace;line-height:1.6">{text}</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
 
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.html("<div style='height:16px'></div>")
     col1, col2 = st.columns([1,1])
     with col1:
         ptitle("Trending Research Topics (YoY Growth)")
@@ -1090,15 +1090,15 @@ with tabs[6]:
                 use_container_width=True, config={"displayModeBar":False})
 
             risk_color = C["success"] if prob>65 else C["warning"] if prob>40 else C["danger"]
-            st.markdown(f"""
+            st.html(f"""
             <div style="padding:12px;background:rgba(0,0,0,0.2);border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-top:8px">
               <div style="font-size:9px;color:#4a6080;font-family:DM Mono,monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">Key Risk Factors</div>
               {''.join(f'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:11px;color:#8fa4c2;font-family:DM Mono,monospace;flex:1">{f}</span><div style="flex:2;height:3px;background:rgba(255,255,255,0.06);border-radius:2px"><div style="height:100%;width:{p}%;background:#00d4ff;border-radius:2px"></div></div></div>' for f,p in [("Patient Stratification",72),("Endpoint Selection",68),("Sample Size Power",81),("Competitive Landscape",55)])}
-            </div>""", unsafe_allow_html=True)
+            </div>""")
         else:
-            st.markdown('<div style="color:#4a6080;font-family:DM Mono,monospace;font-size:12px;text-align:center;padding:40px">Configure parameters and click<br>"Predict Success Probability"</div>', unsafe_allow_html=True)
+            st.html('<div style="color:#4a6080;font-family:DM Mono,monospace;font-size:12px;text-align:center;padding:40px">Configure parameters and click<br>"Predict Success Probability"</div>')
 
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.html("<div style='height:16px'></div>")
     c1, c2, c3 = st.columns(3)
     with c1:
         ptitle("Phase Transition Waterfall")
@@ -1152,7 +1152,7 @@ with tabs[7]:
     ptitle("Top Disease–Drug Connections")
     hcols = st.columns([2,2,2,3,1.5])
     for hc, ht in zip(hcols, ["Disease","Target Protein","Drug","Mechanism","Confidence"]):
-        hc.markdown(f'<div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>', unsafe_allow_html=True)
+        hc.markdown(f'<div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
 
     for dis, prot, drug, mech, conf in [
         ("Alzheimer's","BACE1","Lecanemab","β-Secretase Inhibition",92),
@@ -1164,11 +1164,11 @@ with tabs[7]:
         ("Autoimmune","JAK-STAT","Baricitinib","JAK1/2 Inhibition",89),
     ]:
         rc = st.columns([2,2,2,3,1.5])
-        rc[0].markdown(f'<div style="font-size:11px;color:#ff3b5c;font-family:DM Mono,monospace;padding:4px 0">{dis}</div>', unsafe_allow_html=True)
-        rc[1].markdown(f'<div style="font-size:11px;color:#ffd700;font-family:DM Mono,monospace;padding:4px 0">{prot}</div>', unsafe_allow_html=True)
-        rc[2].markdown(f'<div style="font-size:11px;color:#00d4ff;font-family:DM Mono,monospace;padding:4px 0">{drug}</div>', unsafe_allow_html=True)
-        rc[3].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;padding:4px 0">{mech}</div>', unsafe_allow_html=True)
-        rc[4].markdown(f'<div style="display:flex;align-items:center;gap:4px;padding:4px 0"><div style="flex:1;height:3px;background:rgba(255,255,255,0.06);border-radius:2px"><div style="height:100%;width:{conf}%;background:#00ff9d;border-radius:2px"></div></div><span style="font-size:9px;color:#00ff9d;font-family:DM Mono,monospace">{conf}%</span></div>', unsafe_allow_html=True)
+        rc[0].markdown(f'<div style="font-size:11px;color:#ff3b5c;font-family:DM Mono,monospace;padding:4px 0">{dis}</div>')
+        rc[1].markdown(f'<div style="font-size:11px;color:#ffd700;font-family:DM Mono,monospace;padding:4px 0">{prot}</div>')
+        rc[2].markdown(f'<div style="font-size:11px;color:#00d4ff;font-family:DM Mono,monospace;padding:4px 0">{drug}</div>')
+        rc[3].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;padding:4px 0">{mech}</div>')
+        rc[4].markdown(f'<div style="display:flex;align-items:center;gap:4px;padding:4px 0"><div style="flex:1;height:3px;background:rgba(255,255,255,0.06);border-radius:2px"><div style="height:100%;width:{conf}%;background:#00ff9d;border-radius:2px"></div></div><span style="font-size:9px;color:#00ff9d;font-family:DM Mono,monospace">{conf}%</span></div>')
 
 # ══════════════════════════════════════════════
 # TAB 9 — RISK INDEX
@@ -1192,15 +1192,15 @@ with tabs[8]:
         ptitle("Pharma Risk Scorecard")
         hcols = st.columns([2.5,0.8,0.8,1,1,1,1])
         for hc, ht in zip(hcols, ["Country","Score","Grade","Shortage","Reg. Delay","Supply","Trials"]):
-            hc.markdown(f'<div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>', unsafe_allow_html=True)
+            hc.markdown(f'<div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#4a6080;font-family:DM Mono,monospace;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,0.12)">{ht}</div>')
         for r in COUNTRY_RISK:
             risk_color = C["danger"] if r[1]>70 else C["warning"] if r[1]>45 else C["success"]
             rc = st.columns([2.5,0.8,0.8,1,1,1,1])
-            rc[0].markdown(f'<div style="font-size:12px;color:#e2eaf5;font-weight:600;padding:3px 0">{r[0]}</div>', unsafe_allow_html=True)
-            rc[1].markdown(f'<div style="font-size:14px;font-weight:700;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[1]}</div>', unsafe_allow_html=True)
-            rc[2].markdown(f'<div style="font-size:12px;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[2]}</div>', unsafe_allow_html=True)
+            rc[0].markdown(f'<div style="font-size:12px;color:#e2eaf5;font-weight:600;padding:3px 0">{r[0]}</div>')
+            rc[1].markdown(f'<div style="font-size:14px;font-weight:700;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[1]}</div>')
+            rc[2].markdown(f'<div style="font-size:12px;color:{risk_color};font-family:DM Mono,monospace;padding:3px 0">{r[2]}</div>')
             for i, val in enumerate([r[3],r[4],r[5],r[6]]):
-                rc[3+i].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;padding:3px 0">{val}</div>', unsafe_allow_html=True)
+                rc[3+i].markdown(f'<div style="font-size:10px;color:#8fa4c2;font-family:DM Mono,monospace;padding:3px 0">{val}</div>')
 
 # ══════════════════════════════════════════════
 # TAB 10 — RESEARCH GAPS
@@ -1217,7 +1217,7 @@ with tabs[9]:
         ("Research Deserts","63","Disease areas",None,False,C["text"]),
         ("AI Recommendations","341","Priority areas",None,True,C["accent2"]),
     ])
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.html("<div style='height:16px'></div>")
 
     col1, col2 = st.columns([6,4])
     with col1:
@@ -1228,7 +1228,7 @@ with tabs[9]:
         st.plotly_chart(chart_gap_bar(), use_container_width=True, config={"displayModeBar":False})
 
     ptitle("Priority Research Opportunity Bubbles")
-    st.markdown("""
+    st.html("""
     <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:20px">
       <span class="gap-high">Rare Neurological</span>
       <span class="gap-high">Neglected Tropical Diseases</span>
@@ -1241,7 +1241,7 @@ with tabs[9]:
       <span class="gap-medium">Geriatric Syndromes</span>
       <span class="gap-low">Vector-borne Viruses</span>
       <span class="gap-low">Neonatal Infections</span>
-    </div>""", unsafe_allow_html=True)
+    </div>""")
 
     ptitle("AI-Generated Research Opportunity Insights")
     g1, g2, g3 = st.columns(3)
@@ -1262,15 +1262,15 @@ with tabs[9]:
           <div style="font-size:13px;font-weight:700;color:{color};margin-bottom:6px;font-family:Syne,sans-serif">{title}</div>
           <div style="font-size:11px;color:#8fa4c2;font-family:DM Mono,monospace;line-height:1.6;margin-bottom:8px">{text}</div>
           <div style="font-size:9px;color:{color};font-family:DM Mono,monospace;letter-spacing:0.1em">{badge}</div>
-        </div>""", unsafe_allow_html=True)
+        </div>""")
 
 # ─────────────────────────────────────────────
 # FOOTER
 # ─────────────────────────────────────────────
-st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
-st.markdown(f"""
+st.html("<div style='height:24px'></div>")
+st.html(f"""
 <div style="text-align:center;padding:16px;border-top:1px solid rgba(0,212,255,0.1);
   font-family:DM Mono,monospace;font-size:9px;color:#4a6080;letter-spacing:0.1em">
   GLOBAL DRUG INTELLIGENCE MONITOR · DATA SOURCES: FDA · WHO · PUBMED · CLINICALTRIALS.GOV ·
   LAST UPDATE: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}
-</div>""", unsafe_allow_html=True)
+</div>""")
